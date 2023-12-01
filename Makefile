@@ -18,3 +18,6 @@ z:
 	@ zellij -V || exit 1
 	@ YEAR=$(year) DAY=$(day) zellij action new-tab -l .zellij/layout.kdl
 
+test:
+	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/input.txt
+
