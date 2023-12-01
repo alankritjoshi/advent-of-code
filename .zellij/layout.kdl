@@ -1,0 +1,27 @@
+layout {
+    tab name="${YEAR}/${DAY}" cwd="${YEAR}/${DAY}" {
+      pane split_direction="vertical" {
+          pane edit="main.go" {
+              name "Editing main.go"
+              size "65%"
+          }
+          pane split_direction="horizontal" {
+              name "Tests"
+              pane command="go" {
+                  name "Test - Sample"
+                  start_suspended true
+                  args "run" "main.go" "-i" "sample.txt"
+              }
+              pane command="go" {
+                  name "Test - Actual"
+                  start_suspended true
+                  args "run" "main.go" "-i" "input.txt"
+              }
+          }
+      }
+      pane size=1 borderless=true {
+          plugin location="zellij:compact-bar"
+      }
+    }
+}
+
