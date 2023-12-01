@@ -63,6 +63,10 @@ if [ -n "$YEAR" ] && [ -n "$DAY" ]; then
 	# If the input is not available, delete the file
 	if [ $? -ne 0 ]; then
 		rm -rf $DIRECTORY/input.txt
+		# If $DIRECTORY is empty, delete it
+		if [ ! "$(ls -A $DIRECTORY)" ]; then
+			rm -rf $DIRECTORY
+		fi
 		exit 1
 	else
 		echo "Input downloaded to $DIRECTORY/input.txt"
