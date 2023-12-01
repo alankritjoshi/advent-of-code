@@ -12,7 +12,7 @@ while getopts ":cy:d:" opt; do
 	y)
 		YEAR="$OPTARG"
 		;;
-	q)
+	d)
 		DAY="$OPTARG"
 		;;
 	\?)
