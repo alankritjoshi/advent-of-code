@@ -32,7 +32,7 @@ make input year=2023 day=1
 
 ### Edit & Run using Zellij
 
-If you use [Zellij](zellij-org/zellij), you can edit and run the code with the [layout](.zellij/layout.kdl).
+If you use [Zellij](https://github.com/zellij-org/zellij), you can edit and run the code with the [layout](.zellij/layout.kdl).
 
 ```sh
 make z year=2023 day=1
