@@ -15,7 +15,7 @@ input:
 # edit using zellij layout (IFF you have zellij installed)
 # return exit code 1 if zellij is not installed
 z:
-	@ zellij -V || exit 1
+	@ zellij -V >/dev/null || exit 1
 	@ YEAR=$(year) DAY=$(day) zellij action new-tab -l .zellij/layout.kdl
 
 test:
