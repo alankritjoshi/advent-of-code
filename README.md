@@ -13,7 +13,7 @@
 ### Set Cookie
 
 ```sh
-./gum.sh -c
+./run.sh -c
 ```
 
 ### Get Input
@@ -21,6 +21,6 @@
 Download the input for the current year and day to YEAR/DAY/input.txt
 
 ```sh
-./gum.sh -y 2023 -q 1
+./run.sh -y 2023 -d 1
 ```
 

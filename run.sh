@@ -2,9 +2,9 @@
 
 FETCH_COOKIE=false
 YEAR=""
-QUESTION=""
+DAY=""
 
-while getopts ":cy:q:" opt; do
+while getopts ":cy:d:" opt; do
 	case $opt in
 	c)
 		FETCH_COOKIE=true
@@ -13,7 +13,7 @@ while getopts ":cy:q:" opt; do
 		YEAR="$OPTARG"
 		;;
 	q)
-		QUESTION="$OPTARG"
+		DAY="$OPTARG"
 		;;
 	\?)
 		echo "Invalid option: -$OPTARG" >&2
@@ -52,13 +52,13 @@ else
 	exit 1
 fi
 
-if [ -n "$YEAR" ] && [ -n "$QUESTION" ]; then
-	DIRECTORY="$YEAR/$QUESTION"
+if [ -n "$YEAR" ] && [ -n "$DAY" ]; then
+	DIRECTORY="$YEAR/$DAY"
 	if [ ! -d "$DIRECTORY" ]; then
 		mkdir -p "$DIRECTORY"
 	fi
 
-	http --check-status --ignore-stdin -o $DIRECTORY/input.txt https://adventofcode.com/$YEAR/day/$QUESTION/input "Cookie:session=$AOC_COOKIE"
+	http --check-status --ignore-stdin -o $DIRECTORY/input.txt https://adventofcode.com/$YEAR/day/$DAY/input "Cookie:session=$AOC_COOKIE"
 
 	# If the input is not available, delete the file
 	if [ $? -ne 0 ]; then
