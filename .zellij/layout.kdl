@@ -1,5 +1,5 @@
 layout {
-    tab name="${YEAR}/${DAY}" cwd="${YEAR}/${DAY}" {
+    tab cwd="${YEAR}/${DAY}" {
       pane split_direction="vertical" {
           pane edit="main.go" {
               name "Editing main.go"
