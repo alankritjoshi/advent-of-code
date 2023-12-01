@@ -2,26 +2,44 @@
 
 ## Requirements
 
-### Talking with [AoC](https://adventofcode.com) Website
+### Talking with [AoC](https://adventofcode.com)
 
 - bash
 - [httpie](https://github.com/httpie/cli)
 - [Gum](https://github.com/charmbracelet/gum)
 
+### [OPTIONAL] Edit & Run with Zellij
+
+- [Zellij](https://github.com/zellij-org/zellij)
+
 ## Usage
+
+> NOTE: *year* and *day* are optional. If not set, the *current* *year* and *DAY*=*1* are used.
 
 ### Set Cookie
 
 ```sh
-./run.sh -c
+make cookie
 ```
 
 ### Get Input
 
-Download the input for the current year and day to YEAR/DAY/input.txt
+Download the input to $year/$day/input.txt.
 
 ```sh
-./run.sh -y 2023 -d 1
+make input year=2023 day=1
 ```
 
+### Edit & Run using Zellij
+
+If you use [Zellij](zellij-org/zellij), you can edit and run the code with the [layout](.zellij/layout.kdl).
+
+```sh
+make z year=2023 day=1
+```
+
+### Test
+
+```sh
+make test year=2023 day=1
 ```
