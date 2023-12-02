@@ -91,7 +91,9 @@ if [ "$GET_INPUT" = true ]; then
 			echo "Input download cancelled/failed!"
 			exit 1
 		else
+			head -n 5 $DIRECTORY/input.txt >$DIRECTORY/sample.txt
 			echo "Input downloaded to $DIRECTORY/input.txt"
+			echo "Sample created in $DIRECTORY/sample.txt"
 		fi
 	fi
 fi
