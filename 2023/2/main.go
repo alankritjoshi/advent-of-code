@@ -29,7 +29,7 @@ func main() {
 
 	r := bufio.NewReader(f)
 
-	validIDTotal := 0
+	powerTotal := 0
 
 	for {
 		line, err := r.ReadString('\n')
@@ -49,9 +49,7 @@ func main() {
 		gameIDStr := strings.Split(gameWord, " ")[1]
 		gameID, _ := strconv.Atoi(gameIDStr)
 
-		game := game{
-			id: gameID,
-		}
+		game := NewGame(gameID)
 
 		// get balls
 		ballsLine := idBallsSplit[1]
@@ -72,19 +70,13 @@ func main() {
 				}
 			}
 
-			if !game.isValid() {
-				break
-			}
-
 			game.reset()
 		}
 
-		if game.isValid() {
-			validIDTotal += game.id
-		}
+		powerTotal += game.power()
 	}
 
-	fmt.Println(validIDTotal)
+	fmt.Println(powerTotal)
 }
 
 const (
@@ -100,11 +92,10 @@ var colorMap = map[string]string{
 }
 
 type game struct {
-	id int
-
-	red   int
-	green int
-	blue  int
+	red   ball
+	green ball
+	blue  ball
+	id    int
 }
 
 func NewGame(id int) *game {
@@ -113,37 +104,77 @@ func NewGame(id int) *game {
 	}
 }
 
-func (g *game) addBall(color string, count int) error {
-	c, ok := colorMap[color]
+func (g *game) addBall(colorStr string, count int) error {
+	colorType, ok := colorMap[colorStr]
 	if !ok {
-		return fmt.Errorf("failed to find color: %s", c)
+		return fmt.Errorf("failed to find color: %s", colorStr)
 	}
 
-	switch color {
+	switch colorType {
 	case blue:
-		g.blue += count
+		g.blue.add(count)
 	case green:
-		g.green += count
+		g.green.add(count)
 	case red:
-		g.red += count
+		g.red.add(count)
 	}
 
 	return nil
 }
 
 func (g game) isValid() bool {
-	if g.red > 12 || g.green > 13 || g.blue > 14 {
+	if g.red.count > 12 || g.green.count > 13 || g.blue.count > 14 {
 		return false
 	}
 	return true
 }
 
 func (g *game) reset() {
-	g.red = 0
-	g.green = 0
-	g.blue = 0
+	g.red.reset()
+	g.green.reset()
+	g.blue.reset()
+}
+
+func (g game) power() int {
+	if g.red.min == 0 && g.green.min == 0 && g.blue.min == 0 {
+		return 0
+	}
+
+	var (
+		red   = g.red.min
+		green = g.green.min
+		blue  = g.blue.min
+	)
+
+	if g.red.min == 0 {
+		red = 1
+	}
+
+	if g.green.min == 0 {
+		green = 1
+	}
+
+	if g.blue.min == 0 {
+		blue = 1
+	}
+
+	return red * green * blue
 }
 
 func (g game) String() string {
-	return fmt.Sprintf("Game %5d - red:%5d     green:%5d     blue:%5d", g.id, g.red, g.green, g.blue)
+	return fmt.Sprintf("Game %5d - red:%5d     green:%5d     blue:%5d     -     power:%5d", g.id, g.red, g.green, g.blue, g.power())
+}
+
+type ball struct {
+	count int
+	min   int
+}
+
+func (b *ball) add(count int) {
+	b.count += count
+	b.min = max(b.min, count)
+}
+
+func (b *ball) reset() {
+	b.count = 0
 }
