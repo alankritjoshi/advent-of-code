@@ -36,8 +36,8 @@ poetry install
 
 ## Usage
 
-> NOTE: *year*, *day*, *template* & *txt* are optional. If not set, the *year*=<*current*>, *day*=*1*, *template*=*go* and *txt*=*input.txt* are used.
-> e.g., `make run year=2023 day=2 template=py txt=sample.txt`
+> NOTE: *year*, *day*, *lang* & *txt* are optional. If not set, the *year*=<*current*>, *day*=*1*, *lang*=*go* and *txt*=*input.txt* are used.
+> e.g., `make run year=2023 day=2 lang=py txt=sample.txt`
 
 ### Setup
 
@@ -71,10 +71,10 @@ make input
 
 ### Copy Template
 
-Copy the *template* (`go` or `py`) to *year*/*day*/main.*template*.
+Copy the template for *lang* (`go` or `py`) to *year*/*day*/main.*lang*.
 
 ```sh
-make template template=py
+make template lang=py
 ```
 
 ### Run
@@ -91,7 +91,7 @@ make air
 
 ### Edit & Run using Zellij
 
-If using Zellij, edit and run the code with the [layout](.zellij/layout.kdl).
+If using Zellij, edit and run the code with one of the [layouts](.zellij/) corresponding to the *lang*.
 
 ```sh
 make z
