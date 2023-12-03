@@ -2,11 +2,47 @@
 
 ## Requirements
 
+> NOTE: install instructions are for macOS using [Homebrew](https://brew.sh). Use your package manager of choice.
+
 ### Talking with [AoC](https://adventofcode.com)
 
+#### Dependencies
 - bash
 - [httpie](https://github.com/httpie/cli)
 - [Gum](https://github.com/charmbracelet/gum)
+
+#### Install
+
+```sh
+brew install bash httpie gum
+```
+
+### Go
+
+#### Dependencies
+
+- [Go](https://golang.org) 1.21+
+
+#### Install 
+
+```sh
+brew install go
+go mod download
+```
+
+### Python
+
+#### Dependencies
+
+- [Python](https://www.python.org) 3.12+
+- [Poetry](https://python-poetry.org)
+
+#### Install
+
+```sh
+pip install poetry
+poetry install
+```
 
 ### [OPTIONAL] Edit & Run with Zellij
 
