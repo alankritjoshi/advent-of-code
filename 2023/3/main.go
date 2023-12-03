@@ -101,7 +101,7 @@ func main() {
 			}
 		}
 
-		// process previoys symbols as both sides of it are now checked
+		// process previous symbols as both sides of it are now checked
 		for _, l := range previousSymbols {
 			if len(l) == 2 {
 				total += l[0].value * l[1].value
