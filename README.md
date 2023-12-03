@@ -78,7 +78,7 @@ make cookie
 
 ### Get Input
 
-Download the input to $year/$day/input.txt.
+Download the input to *year*/*day*/input.txt.
 
 ```sh
 make input year=2023 day=1
@@ -86,7 +86,7 @@ make input year=2023 day=1
 
 ### Set Template
 
-Copies the specified `TEMPLATE` (`go`, `py`, etc.) to $year/$day/main.`<TEMPLATE>`.
+Copies the specified *template* (`go`, `py`, etc.) to *year*/*day*/main.*template*.
 
 ```sh
 make template template=py day=1
