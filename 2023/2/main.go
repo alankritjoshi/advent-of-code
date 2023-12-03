@@ -123,10 +123,7 @@ func (g *game) addBall(colorStr string, count int) error {
 }
 
 func (g game) isValid() bool {
-	if g.red.count > 12 || g.green.count > 13 || g.blue.count > 14 {
-		return false
-	}
-	return true
+	return g.red.count <= 12 && g.green.count <= 13 && g.blue.count <= 14
 }
 
 func (g *game) reset() {
