@@ -24,7 +24,7 @@ test:
 # return exit code 1 if zellij is not installed
 z:
 	@ zellij -V >/dev/null || exit 1
-	@ YEAR=$(year) DAY=$(day) zellij action new-tab -l .zellij/layout.kdl
+	@ YEAR=$(year) DAY=$(day) zellij action new-tab -l .zellij/$(template).kdl
 
 setup: cookie input template
 

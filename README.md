@@ -14,14 +14,14 @@
 
 ## Usage
 
-> NOTE: *year* and *day* are optional. If not set, the *current* *year* and *DAY*=*1* are used.
+> NOTE: *year*, *day* and *template* are optional. If not set, the *year*=<*current*>, *day*=*1* and *template*=*go* are used.
 
 ### Setup
 
 Sets up cookie, input, and template.
 
 ```sh
-make setup day=2
+make setup day=2 template=py
 ```
 
 ### Setup using Zellij
@@ -51,7 +51,7 @@ make input year=2023 day=1
 Copies the specified `TEMPLATE` (`go`, `py`, etc.) to $year/$day/main.`<TEMPLATE>`.
 
 ```sh
-make template template=go day=1
+make template template=py day=1
 ```
 
 ### Edit & Run using Zellij
