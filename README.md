@@ -37,7 +37,7 @@ poetry install
 ## Usage
 
 > NOTE: *year*, *day*, *template* & *txt* are optional. If not set, the *year*=<*current*>, *day*=*1*, *template*=*go* and *txt*=*input.txt* are used.
-> e.g., `make run day=2023 day=2 template=py txt=sample.txt`
+> e.g., `make run year=2023 day=2 template=py txt=sample.txt`
 
 ### Setup
 
