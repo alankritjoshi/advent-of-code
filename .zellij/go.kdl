@@ -9,13 +9,13 @@ layout {
               name "Tests"
               pane command="go" {
                   name "Test - Sample"
-                  start_suspended true
-                  args "run" "main.go" "-i" "sample.txt"
+                  start_suspended false
+                  args "run" "github.com/cosmtrek/air" "--build.bin" "./tmp/main -i sample.txt"
               }
               pane command="go" {
                   name "Test - Actual"
-                  start_suspended true
-                  args "run" "main.go" "-i" "input.txt"
+                  start_suspended false
+                  args "run" "github.com/cosmtrek/air" "--build.bin" "./tmp/main -i input.txt"
               }
           }
       }

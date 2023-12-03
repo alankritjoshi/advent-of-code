@@ -6,41 +6,25 @@
 
 ### Talking with [AoC](https://adventofcode.com)
 
-#### Dependencies
-- bash
-- [httpie](https://github.com/httpie/cli)
-- [Gum](https://github.com/charmbracelet/gum)
-
-#### Install
-
 ```sh
 brew install bash httpie gum
 ```
 
-### Go
-
-#### Dependencies
-
-- [Go](https://golang.org) 1.21+
-
-#### Install 
+### Languages
 
 ```sh
-brew install go
+brew install go python pyenv poetry
+```
+
+#### [Go](https://golang.org) 1.21+
+
+```sh
 go mod download
 ```
 
-### Python
-
-#### Dependencies
-
-- [Python](https://www.python.org) 3.12+
-- [Poetry](https://python-poetry.org)
-
-#### Install
+#### [Python](https://www.python.org) 3.12+
 
 ```sh
-brew install pyenv
 pyenv install
 pip install poetry
 poetry install
@@ -56,7 +40,7 @@ poetry install
 
 ### Setup
 
-Sets up cookie, input, and template.
+Set up cookie, input, and template.
 
 ```sh
 make setup day=2 template=py
@@ -64,7 +48,7 @@ make setup day=2 template=py
 
 ### Setup using Zellij
 
-Sets up cookie, input, and template. And then opens corresponding setup in Zellij.
+[Setup](#setup) and then open corresponding setup in Zellij.
 
 ```sh
 make setupz day=2
