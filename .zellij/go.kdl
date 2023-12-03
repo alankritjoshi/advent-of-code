@@ -10,12 +10,12 @@ layout {
               pane command="go" {
                   name "Test - Sample"
                   start_suspended false
-                  args "run" "github.com/cosmtrek/air" "--build.bin" "./tmp/main -i sample.txt"
+                  args "run" "github.com/cosmtrek/air" "--build.args_bin" "-i,sample.txt" "--build.delay" "0" "--misc.clean_on_exit" "true"
               }
               pane command="go" {
                   name "Test - Actual"
                   start_suspended false
-                  args "run" "github.com/cosmtrek/air" "--build.bin" "./tmp/main -i input.txt"
+                  args "run" "github.com/cosmtrek/air" "--build.args_bin" "-i,input.txt" "--build.delay" "0" "--misc.clean_on_exit" "true"
               }
           }
       }
