@@ -31,7 +31,7 @@ func main() {
 
 	var (
 		previousNums    []*number
-		previousSymbols = make(map[int]bool)
+		previousSymbols = make(map[int][]*number)
 
 		total int
 	)
@@ -49,7 +49,7 @@ func main() {
 
 		var (
 			currentNums    []*number
-			currentSymbols = make(map[int]bool)
+			currentSymbols = make(map[int][]*number)
 
 			currentNum = NewNumber()
 		)
@@ -67,9 +67,9 @@ func main() {
 				continue
 			}
 
-			// record if valid symbol
-			if r != '.' {
-				currentSymbols[i] = true
+			// record if valid gear
+			if r != '.' && r == '*' {
+				currentSymbols[i] = []*number{}
 			}
 
 			// occurence of a valid symbol indicates end of a valid number
@@ -84,37 +84,39 @@ func main() {
 		for _, l := range previousNums {
 			for i := l.start - 1; i <= l.end+1; i++ {
 				if _, ok := currentSymbols[i]; ok {
-					total += l.value
-					break
+					currentSymbols[i] = append(currentSymbols[i], l)
 				}
 			}
 		}
 
-		// use this to filter out numbers that are parts to avoid duplicates in the next iteration
-		var filteredCurrentNums []*number
-
 		for _, l := range currentNums {
-			var include bool
-
 			// check with both previous and current symbols
 			for i := l.start - 1; i <= l.end+1; i++ {
 				if _, ok := currentSymbols[i]; ok {
-					total += l.value
-				} else if _, ok := previousSymbols[i]; ok {
-					total += l.value
-				} else {
-					include = true
+					currentSymbols[i] = append(currentSymbols[i], l)
 				}
-			}
-
-			if include {
-				filteredCurrentNums = append(filteredCurrentNums, l)
+				if _, ok := previousSymbols[i]; ok {
+					previousSymbols[i] = append(previousSymbols[i], l)
+				}
 			}
 		}
 
-		previousNums = filteredCurrentNums
-		previousSymbols = currentSymbols
+		// process previoys symbols as both sides of it are now checked
+		for _, l := range previousSymbols {
+			if len(l) == 2 {
+				total += l[0].value * l[1].value
+			}
+		}
 
+		previousNums = currentNums
+		previousSymbols = currentSymbols
+	}
+
+	// process last line symbols
+	for _, l := range previousSymbols {
+		if len(l) == 2 {
+			total += l[0].value * l[1].value
+		}
 	}
 
 	fmt.Println(total)
