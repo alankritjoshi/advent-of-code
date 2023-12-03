@@ -8,18 +8,24 @@ txt ?= input.txt
 
 # get the cookie from adventofcode.com
 cookie:
-	@ ./run.sh -c
+	@ ./setup.sh -c
 
 # get the input
 input:
-	@ ./run.sh -i -y $(year) -d $(day)
+	@ ./setup.sh -i -y $(year) -d $(day)
 
 # create main file from template
 template:
-	@ ./run.sh -t $(lang) -y $(year) -d $(day)
+	@ ./setup.sh -t $(lang) -y $(year) -d $(day)
 
 run:
+ifeq ($(lang),go)
 	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
+else ifeq ($(lang),py)
+  @ python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
+else
+  @ echo "Unsupported language: $(lang)"
+endif
 
 air:
 	@ cd $(year)/$(day) && go run github.com/cosmtrek/air --build.args_bin="-i,$(txt)" || true
