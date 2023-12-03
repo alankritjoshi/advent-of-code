@@ -91,7 +91,7 @@ make air
 
 ### Edit & Run using Zellij
 
-If using [Zellij](https://github.com/zellij-org/zellij), edit and run the code with the [layout](.zellij/layout.kdl).
+If using Zellij, edit and run the code with the [layout](.zellij/layout.kdl).
 
 ```sh
 make z
