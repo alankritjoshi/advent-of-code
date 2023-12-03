@@ -40,6 +40,8 @@ go mod download
 #### Install
 
 ```sh
+brew install pyenv
+pyenv install
 pip install poetry
 poetry install
 ```
