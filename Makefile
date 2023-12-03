@@ -4,6 +4,7 @@
 year ?= $(shell date +'%Y')
 day ?= 1
 template ?= go
+txt ?= input.txt
 
 # get the cookie from adventofcode.com
 cookie:
@@ -17,8 +18,12 @@ input:
 template:
 	@ ./run.sh -t $(template) -y $(year) -d $(day)
 
-test:
-	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/input.txt
+run:
+	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
+
+air:
+	@ cd $(year)/$(day) && go run github.com/cosmtrek/air --build.args_bin="-i,$(txt)" || true
+	@ cd ..
 
 # edit using zellij layout (IFF you have zellij installed)
 # return exit code 1 if zellij is not installed

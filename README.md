@@ -36,14 +36,15 @@ poetry install
 
 ## Usage
 
-> NOTE: *year*, *day* and *template* are optional. If not set, the *year*=<*current*>, *day*=*1* and *template*=*go* are used.
+> NOTE: *year*, *day*, *template* & *txt* are optional. If not set, the *year*=<*current*>, *day*=*1*, *template*=*go* and *txt*=*input.txt* are used.
+> e.g., `make run day=2023 day=2 template=py txt=sample.txt`
 
 ### Setup
 
-Set up cookie, input, and template.
+Setup cookie, input, and template.
 
 ```sh
-make setup day=2 template=py
+make setup
 ```
 
 ### Setup using Zellij
@@ -51,7 +52,7 @@ make setup day=2 template=py
 [Setup](#setup) and then open corresponding setup in Zellij.
 
 ```sh
-make setupz day=2
+make setupz
 ```
 
 ### Set Cookie
@@ -60,32 +61,39 @@ make setupz day=2
 make cookie
 ```
 
-### Get Input
+### Download Input
 
-Download the input to *year*/*day*/input.txt.
+Download the input to *year*/*day*/*txt*.
 
 ```sh
-make input year=2023 day=1
+make input
 ```
 
-### Set Template
+### Copy Template
 
-Copies the specified *template* (`go`, `py`, etc.) to *year*/*day*/main.*template*.
+Copy the *template* (`go` or `py`) to *year*/*day*/main.*template*.
 
 ```sh
-make template template=py day=1
+make template template=py
+```
+
+### Run
+
+```sh
+make test
+```
+
+### Run with Hot Reload
+
+```sh
+make air
 ```
 
 ### Edit & Run using Zellij
 
-If you use [Zellij](https://github.com/zellij-org/zellij), you can edit and run the code with the [layout](.zellij/layout.kdl).
+If using [Zellij](https://github.com/zellij-org/zellij), edit and run the code with the [layout](.zellij/layout.kdl).
 
 ```sh
-make z year=2023 day=1
+make z
 ```
 
-### Test
-
-```sh
-make test year=2023 day=1
-```
