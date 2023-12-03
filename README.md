@@ -80,7 +80,7 @@ make template lang=py
 ### Run
 
 ```sh
-make test
+make run
 ```
 
 ### Run with Hot Reload
