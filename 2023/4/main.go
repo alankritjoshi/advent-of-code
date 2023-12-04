@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -30,7 +29,7 @@ func main() {
 
 	r := bufio.NewReader(f)
 
-	total := 0
+	hand := make(map[int]int)
 
 	for {
 		line, err := r.ReadString('\n')
@@ -45,33 +44,39 @@ func main() {
 
 		lineSplit := strings.Split(line, ":")
 
-		// cardNum, _ := strconv.Atoi(strings.Split(lineSplit[0], " ")[1])
+		cardNum, _ := strconv.Atoi(strings.Fields(lineSplit[0])[1])
+
+		hand[cardNum] += 1
 
 		cardsSplit := strings.Split(lineSplit[1], "|")
 
-		hand := make(map[int]int)
+		current := make(map[int]bool)
 
 		for _, cardInHand := range strings.Fields(cardsSplit[1]) {
 			cardVal, _ := strconv.Atoi(cardInHand)
 
-			hand[cardVal] += 1
+			current[cardVal] = true
 		}
 
 		var cardTotal int
 
-		for _, winningCard := range strings.Split(strings.TrimSpace(cardsSplit[0]), " ") {
+		for _, winningCard := range strings.Fields(cardsSplit[0]) {
 			cardVal, _ := strconv.Atoi(winningCard)
 
-			if count, ok := hand[cardVal]; ok {
-				if cardTotal == 0 {
-					cardTotal = int(math.Pow(2, float64(count-1)))
-				} else {
-					cardTotal *= int(math.Pow(2, float64(count)))
-				}
+			if _, ok := current[cardVal]; ok {
+				cardTotal += 1
 			}
 		}
 
-		total += cardTotal
+		for i := 1; i <= cardTotal; i++ {
+			hand[cardNum+i] += hand[cardNum]
+		}
+	}
+
+	var total int
+
+	for _, v := range hand {
+		total += v
 	}
 
 	fmt.Println(total)
