@@ -1,6 +1,7 @@
 """
 Hot Reload for a Python Script.
 """
+
 import sys
 import os
 import subprocess
@@ -42,6 +43,7 @@ class ReloadHandler(FileSystemEventHandler):
 
         event: event object.
         """
+
         if not event.src_path.endswith(".py") or self._is_too_soon():
             return
 
@@ -55,12 +57,14 @@ class ReloadHandler(FileSystemEventHandler):
         """
         Checks if the last reload was too soon.
         """
+
         return (time.time() - self._last_event_time) <= self._debounce_time
 
     def _reload(self) -> None:
         """
         Reloads the script by running a new subprocess.
         """
+
         try:
             cmd: list[str] = [sys.executable, self._script_path] + self._script_args
             subprocess.run(cmd)
