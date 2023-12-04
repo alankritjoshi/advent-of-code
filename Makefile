@@ -12,7 +12,7 @@ cookie:
 
 # get the input
 input:
-	@ ./setup.sh -i -y $(year) -d $(day)
+	@ ./setup.sh -i $(txt) -y $(year) -d $(day)
 
 # create main file from template
 template:

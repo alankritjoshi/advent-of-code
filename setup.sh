@@ -3,16 +3,17 @@
 FETCH_COOKIE=false
 GET_INPUT=false
 TEMPLATE=""
+TXT=""
 YEAR=""
 DAY=""
 
-while getopts ":cit:y:d:" opt; do
+while getopts ":ci:t:y:d:" opt; do
 	case $opt in
 	c)
 		FETCH_COOKIE=true
 		;;
 	i)
-		GET_INPUT=true
+		TXT=$OPTARG
 		;;
 	t)
 		TEMPLATE="$OPTARG"
@@ -58,7 +59,7 @@ else
 	exit 1
 fi
 
-if [ "$GET_INPUT" = true ]; then
+if [ -n "$TXT" ]; then
 	if [ -z "$YEAR" ] || [ -z "$DAY" ]; then
 		echo "Year and Day must be specified for creating using Input flag!"
 		exit 1
@@ -67,10 +68,10 @@ if [ "$GET_INPUT" = true ]; then
 	DIRECTORY="$YEAR/$DAY"
 
 	CANCEL=0
-	if [ -e "$DIRECTORY/input.txt" ]; then
-		echo "WARNING: input.txt already exists!"
+	if [ -e "$DIRECTORY/$TXT" ]; then
+		echo "WARNING: $TXT already exists!"
 
-		gum confirm --default=false "Overwrite $DIRECTORY/input.txt anyway?"
+		gum confirm --default=false "Overwrite $DIRECTORY/$TXT anyway?"
 		CANCEL=$?
 	else
 		if [ ! -d "$DIRECTORY" ]; then
@@ -79,10 +80,10 @@ if [ "$GET_INPUT" = true ]; then
 	fi
 
 	if [ $CANCEL -eq 0 ]; then
-		http --check-status --ignore-stdin -o $DIRECTORY/input.txt https://adventofcode.com/$YEAR/day/$DAY/input "Cookie:session=$AOC_COOKIE"
+		http --check-status --ignore-stdin -o $DIRECTORY/${TXT} https://adventofcode.com/$YEAR/day/$DAY/input "Cookie:session=$AOC_COOKIE"
 		# If the input is not available, delete the file
 		if [ $? -ne 0 ]; then
-			rm -rf $DIRECTORY/input.txt
+			rm -rf $DIRECTORY/$TXT
 			# If $DIRECTORY is empty, delete it
 			if [ ! "$(ls -A $DIRECTORY)" ]; then
 				rm -rf $DIRECTORY
@@ -91,9 +92,21 @@ if [ "$GET_INPUT" = true ]; then
 			echo "Input download cancelled/failed!"
 			exit 1
 		else
-			head -n 5 $DIRECTORY/input.txt >$DIRECTORY/sample.txt
-			echo "Input downloaded to $DIRECTORY/input.txt"
-			echo "Sample created in $DIRECTORY/sample.txt"
+			echo "Input downloaded to $DIRECTORY/$TXT"
+			# If non-sample.txt file is created, ask to create sample.txt
+			if [ $TXT != "sample.txt" ]; then
+				if [ -e "$DIRECTORY/sample.txt" ]; then
+					WARNING="WARNING: sample.txt already exists! BUT..."
+					gum confirm --default=false "WARNING: sample.txt already exists! Overwrite and create new one?"
+				else
+					gum confirm --default=false "Create sample file?"
+				fi
+
+				if [ $? -eq 0 ]; then
+					head -n 5 $DIRECTORY/$TXT >$DIRECTORY/sample.txt
+					echo "Sample created in $DIRECTORY/sample.txt"
+				fi
+			fi
 		fi
 	fi
 fi
