@@ -14,9 +14,15 @@ class MyHandler(FileSystemEventHandler):
         self.last_event_time = 0
         super().__init__()
 
+        self._rerun()
+
     def on_modified(self, event):
         if event.src_path.endswith(".py") and (time.time() - self.last_event_time) > self.debounce_time:
-            print(f"{os.path.basename(event.src_path)} has changed. Reloading...")
+            file_path = os.path.basename(event.src_path)
+            print(f"\n{file_path} has changed. Reloading...")
+            self._rerun()
+
+    def _rerun(self) -> None:
             try:
                 cmd = [sys.executable, self.script_path] + self.script_args
                 subprocess.run(cmd)
@@ -38,9 +44,9 @@ if __name__ == "__main__":
     input_dir_path = os.path.dirname(input_file_path)
     input_script_args = script.split(" ")[1:]
 
-    event_handler = MyHandler(input_file_path, input_script_args)
-
     print("Watching...\n\n")
+
+    event_handler = MyHandler(input_file_path, input_script_args)
 
     observer = Observer()
     observer.schedule(event_handler, input_dir_path, recursive=False)

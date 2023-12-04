@@ -86,7 +86,7 @@ make run
 ### Run with Hot Reload
 
 ```sh
-make air
+make hot
 ```
 
 ### Edit & Run using Zellij

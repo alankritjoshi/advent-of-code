@@ -22,14 +22,20 @@ run:
 ifeq ($(lang),go)
 	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
 else ifeq ($(lang),py)
-	@ python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
+	@ poetry run python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
 else
   @ echo "Unsupported language: $(lang)"
 endif
 
-air:
+hot:
+ifeq ($(lang),go)
 	@ cd $(year)/$(day) && go run github.com/cosmtrek/air --build.args_bin="-i,$(txt)" || true
 	@ cd ..
+else ifeq ($(lang),py)
+	@ poetry run python hotreload.py -s "$(year)/$(day)/main.py -i $(year)/$(day)/$(txt)"
+else
+  @ echo "Unsupported language: $(lang)"
+endif
 
 # edit using zellij layout (IFF you have zellij installed)
 # return exit code 1 if zellij is not installed
