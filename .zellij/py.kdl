@@ -7,15 +7,15 @@ layout {
           }
           pane split_direction="horizontal" {
               name "Tests"
-              pane command="python" {
+              pane command="poetry" {
                   name "Test - Sample"
-                  start_suspended true
-                  args "main.py" "-i" "sample.txt"
+                  start_suspended false
+                  args "run" "python" "../../hotreload.py" "-s" "./main.py -i sample.txt" 
               }
-              pane command="python" {
+              pane command="poetry" {
                   name "Test - Actual"
-                  start_suspended true
-                  args "main.py" "-i" "input.txt"
+                  start_suspended false
+                  args "run" "python" "../../hotreload.py" "-s" "./main.py -i input.txt" 
               }
           }
       }

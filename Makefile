@@ -22,7 +22,7 @@ run:
 ifeq ($(lang),go)
 	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
 else ifeq ($(lang),py)
-  @ python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
+	@ python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
 else
   @ echo "Unsupported language: $(lang)"
 endif
