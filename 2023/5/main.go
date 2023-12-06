@@ -206,8 +206,10 @@ func (mrs mapRanges) getDestinationValue(others []valRange) []valRange {
 	)
 
 	for _, mr := range mrs {
+		// reset nextUnchanged for each mapRange
 		nextUnchanged = make([]valRange, 0)
 
+		// using this like a queue to exhaust all the unchanged ranges for this mapRange
 		for len(currentUnchanged) != 0 {
 			current := currentUnchanged[0]
 			currentUnchanged = currentUnchanged[1:]
@@ -219,11 +221,13 @@ func (mrs mapRanges) getDestinationValue(others []valRange) []valRange {
 			nextUnchanged = append(nextUnchanged, unchanged...)
 		}
 
+		// copy the nextUnchanged to currentUnchanged to look for crosses with the next mapRange
 		currentUnchanged = MergeValRange(nextUnchanged)
 	}
 
 	final := append(allMappedDestinations, currentUnchanged...)
 
+	// merge them if they overlap
 	final = MergeValRange(final)
 
 	return final
