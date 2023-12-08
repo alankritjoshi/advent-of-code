@@ -30,9 +30,11 @@ pip install poetry
 poetry install
 ```
 
-### [OPTIONAL] Edit & Run with Zellij
+### [OPTIONAL] [Zellij](https://github.com/zellij-org/zellij)
 
-- [Zellij](https://github.com/zellij-org/zellij)
+```sh
+brew install zellij
+```
 
 ## Usage
 
@@ -74,7 +76,7 @@ make input
 Copy the template for *lang* (`go` or `py`) to *year*/*day*/main.*lang*.
 
 ```sh
-make template lang=py
+make template
 ```
 
 ### Run
