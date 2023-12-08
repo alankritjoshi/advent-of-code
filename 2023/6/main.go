@@ -36,7 +36,7 @@ func main() {
 
 	r := bufio.NewReader(f)
 
-	races := make([]race, 0)
+	var race race
 
 	for {
 		line, err := r.ReadString('\n')
@@ -49,30 +49,30 @@ func main() {
 
 		lineSplit := strings.Fields(line)
 
-		for numIndex, numStr := range lineSplit[1:] {
-			num, err := strconv.Atoi(numStr)
-			if err != nil {
-				log.Fatalf("unable to convert string to int: %v", err)
-			}
+		var numStrBuilder strings.Builder
 
-			if lineSplit[0] == timeKeyword {
-				races = append(races, race{time: num})
-			} else {
-				races[numIndex].distance = num
-			}
+		for _, numPartStr := range lineSplit[1:] {
+			numStrBuilder.WriteString(numPartStr)
+		}
+
+		num, err := strconv.Atoi(numStrBuilder.String())
+		if err != nil {
+			log.Fatalf("unable to convert string to int: %v", err)
+		}
+
+		if lineSplit[0] == timeKeyword {
+			race.time = num
+		} else {
+			race.distance = num
 		}
 	}
 
-	ways := 1
+	ways := 0
 
-	for _, race := range races {
-		raceWays := 0
-		for t := 1; t < race.time; t++ {
-			if (race.time-t)*t > race.distance {
-				raceWays++
-			}
+	for t := 1; t < race.time; t++ {
+		if (race.time-t)*t > race.distance {
+			ways++
 		}
-		ways *= raceWays
 	}
 
 	fmt.Println(ways)
