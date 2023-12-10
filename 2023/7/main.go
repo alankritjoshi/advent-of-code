@@ -11,6 +11,20 @@ import (
 	"strings"
 )
 
+type HandRank int
+
+// order of hand ranks is important as it increases from iota onwards
+const (
+	ordinary HandRank = iota // lowest rank
+	highCard
+	onePair
+	twoPair
+	threeOfAKind
+	fullHouse
+	fourOfAKind
+	fiveOfAKind // highest rank
+)
+
 type card struct {
 	face  string
 	value int
@@ -89,26 +103,83 @@ func (h hand) isInvalid() bool {
 }
 
 func (h hand) isFiveOfAKind() bool {
-	for _, c := range h.cards {
-		if c.face == "J" {
-			return false
+	cardCounts := h.counts()
+
+	var jokers int
+	var hasPair bool
+	var hasTriplet bool
+	var hasQuad bool
+
+	for card, cardCount := range cardCounts {
+		if card.face == "J" {
+			jokers = cardCount
+		} else if cardCount == 5 {
+			return true
+		} else if cardCount == 4 {
+			hasQuad = true
+		} else if cardCount == 3 {
+			hasTriplet = true
+		} else if cardCount == 2 {
+			hasPair = true
 		}
 	}
 
-	return len(h.counts()) == 1
+	if jokers == 1 && hasQuad {
+		return true
+	}
+
+	if jokers == 2 && hasTriplet {
+		return true
+	}
+
+	if jokers == 3 && hasPair {
+		return true
+	}
+
+	if jokers == 4 {
+		return true
+	}
+
+	if jokers == 5 {
+		return true
+	}
+
+	return false
 }
 
 func (h hand) isFourOfAKind() bool {
 	cardCounts := h.counts()
 
-	if len(cardCounts) != 2 {
-		return false
+	var jokers int
+	var hasTriplet bool
+	var naturalPairs []card
+
+	for card, cardCount := range cardCounts {
+		if card.face == "J" {
+			jokers = cardCount
+		} else if cardCount == 4 {
+			return true
+		} else if cardCount == 3 {
+			hasTriplet = true
+		} else if cardCount == 2 {
+			naturalPairs = append(naturalPairs, card)
+		}
 	}
 
-	for _, cardCount := range cardCounts {
-		if cardCount == 4 {
-			return true
-		}
+	if jokers == 1 && hasTriplet {
+		return true
+	}
+
+	if jokers == 2 && len(naturalPairs) == 1 {
+		return true
+	}
+
+	if jokers == 3 && len(naturalPairs) == 0 {
+		return true
+	}
+
+	if jokers == 4 {
+		return true
 	}
 
 	return false
@@ -117,61 +188,106 @@ func (h hand) isFourOfAKind() bool {
 func (h hand) isFullHouse() bool {
 	cardCounts := h.counts()
 
-	if len(cardCounts) != 2 {
-		return false
-	}
+	var jokers int
+	var naturalPairs []card
+	var hasTriplet bool
 
-	for _, cardCount := range cardCounts {
-		if cardCount != 3 && cardCount != 2 {
-			return false
+	for card, cardCount := range cardCounts {
+		if card.face == "J" {
+			jokers = cardCount
+		} else if cardCount == 3 {
+			hasTriplet = true
+		} else if cardCount == 2 {
+			naturalPairs = append(naturalPairs, card)
 		}
 	}
 
-	return true
+	if jokers == 0 && hasTriplet && len(naturalPairs) == 1 {
+		return true
+	}
+
+	if jokers == 1 && len(naturalPairs) == 2 {
+		return true
+	}
+
+	if jokers == 2 && hasTriplet {
+		return true
+	}
+
+	if jokers == 2 && len(naturalPairs) == 1 {
+		return true
+	}
+
+	if jokers == 3 && len(naturalPairs) == 1 {
+		return true
+	}
+
+	return false
 }
 
 func (h hand) isThreeOfAKind() bool {
 	cardCounts := h.counts()
 
-	var hasJoker, hasPair bool
+	var jokers int
+	var naturalPairs []card
+	var hasTriplet bool
 
 	for card, cardCount := range cardCounts {
-
-		if cardCount == 3 {
-			return true
-		}
-
-		if cardCount == 2 {
-			hasPair = true
-		}
-
 		if card.face == "J" {
-			hasJoker = true
+			jokers = cardCount
+		} else if cardCount == 3 {
+			hasTriplet = true
+		} else if cardCount == 2 {
+			naturalPairs = append(naturalPairs, card)
 		}
 	}
 
-	return hasPair && hasJoker
+	if jokers == 0 && hasTriplet && len(naturalPairs) == 0 {
+		return true
+	}
+
+	if jokers == 1 && len(naturalPairs) == 1 {
+		return true
+	}
+
+	if jokers == 2 && len(naturalPairs) == 0 {
+		return true
+	}
+
+	if jokers == 3 && len(naturalPairs) == 0 {
+		return true
+	}
+
+	return false
 }
 
 func (h hand) isTwoPair() bool {
 	cardCounts := h.counts()
 
-	var jokers, pairs int
+	var jokers int
+	var naturalPairs []card
 
 	for card, cardCount := range cardCounts {
 		if card.face == "J" {
 			jokers = cardCount
-		}
-		if cardCount == 2 {
-			pairs++
+		} else if cardCount == 2 {
+			naturalPairs = append(naturalPairs, card)
 		}
 	}
 
-	if pairs == 2 {
+	if jokers == 0 && len(naturalPairs) == 2 {
 		return true
 	}
 
-	if pairs == 1 && jokers >= 1 {
+	if jokers == 1 && len(naturalPairs) == 1 {
+		return true
+	}
+
+	if jokers == 1 && len(naturalPairs) == 2 {
+		return true
+	}
+
+	if jokers == 2 && len(naturalPairs) == 1 {
 		return true
 	}
 
@@ -191,11 +307,7 @@ func (h hand) isOnePair() bool {
 		}
 	}
 
-	if jokers >= 1 {
-		return true
-	}
-
-	return false
+	return jokers == 2
 }
 
 func (h hand) isHighCard() bool {
@@ -210,30 +322,28 @@ func (h hand) isHighCard() bool {
 			return false
 		}
 	}
+
+	return true
 }
 
 func (h hand) strength() int {
-	var strength int
-
-	if h.isHighCard() {
-		strength = 1
-	} else if h.isOnePair() {
-		strength = 2
-	} else if h.isTwoPair() {
-		strength = 3
-	} else if h.isThreeOfAKind() {
-		strength = 4
-	} else if h.isFullHouse() {
-		strength = 5
+	if h.isFiveOfAKind() {
+		return int(fiveOfAKind)
 	} else if h.isFourOfAKind() {
-		strength = 6
-	} else if h.isFiveOfAKind() {
-		strength = 7
+		return int(fourOfAKind)
+	} else if h.isFullHouse() {
+		return int(fullHouse)
+	} else if h.isThreeOfAKind() {
+		return int(threeOfAKind)
+	} else if h.isTwoPair() {
+		return int(twoPair)
+	} else if h.isOnePair() {
+		return int(onePair)
+	} else if h.isHighCard() {
+		return int(highCard)
 	} else {
-		strength = 0
+		return int(ordinary)
 	}
-
-	return strength
 }
 
 func (h hand) String() string {
@@ -347,12 +457,9 @@ func main() {
 
 	sortHands(hands)
 
-	for _, h := range hands {
-		fmt.Println(h, h.strength())
-	}
-
 	var totalWinnings int
 	for i, h := range hands {
+		fmt.Printf("hand %d: %s %d\n", i+1, h, h.strength())
 		totalWinnings += (i + 1) * h.bids
 	}
 
