@@ -486,7 +486,6 @@ func main() {
 
 	var totalWinnings int
 	for i, h := range hands {
-		fmt.Printf("hand %d: %s %d\n", i+1, h, h.strength())
 		totalWinnings += (i + 1) * h.bids
 	}
 
