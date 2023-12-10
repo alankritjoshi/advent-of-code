@@ -26,7 +26,7 @@ var (
 	eight = card{"8", 8}
 	nine  = card{"9", 9}
 	ten   = card{"T", 10}
-	jack  = card{"J", 11}
+	jack  = card{"J", 1} // weakened from 11 to 1 for part 2
 	queen = card{"Q", 12}
 	king  = card{"K", 13}
 	ace   = card{"A", 14}
@@ -89,6 +89,12 @@ func (h hand) isInvalid() bool {
 }
 
 func (h hand) isFiveOfAKind() bool {
+	for _, c := range h.cards {
+		if c.face == "J" {
+			return false
+		}
+	}
+
 	return len(h.counts()) == 1
 }
 
@@ -127,53 +133,83 @@ func (h hand) isFullHouse() bool {
 func (h hand) isThreeOfAKind() bool {
 	cardCounts := h.counts()
 
-	if len(cardCounts) != 3 {
-		return false
-	}
+	var hasJoker, hasPair bool
 
-	for _, cardCount := range cardCounts {
-		if cardCount != 3 && cardCount != 1 {
-			return false
+	for card, cardCount := range cardCounts {
+
+		if cardCount == 3 {
+			return true
+		}
+
+		if cardCount == 2 {
+			hasPair = true
+		}
+
+		if card.face == "J" {
+			hasJoker = true
 		}
 	}
 
-	return true
+	return hasPair && hasJoker
 }
 
 func (h hand) isTwoPair() bool {
 	cardCounts := h.counts()
 
-	if len(cardCounts) != 3 {
-		return false
-	}
+	var jokers, pairs int
 
-	for _, cardCount := range cardCounts {
-		if cardCount != 2 && cardCount != 1 {
-			return false
+	for card, cardCount := range cardCounts {
+		if card.face == "J" {
+			jokers = cardCount
+		}
+		if cardCount == 2 {
+			pairs++
 		}
 	}
 
-	return true
+	if pairs == 2 {
+		return true
+	}
+
+	if pairs == 1 && jokers >= 1 {
+		return true
+	}
+
+	return false
 }
 
 func (h hand) isOnePair() bool {
 	cardCounts := h.counts()
 
-	if len(cardCounts) != 4 {
-		return false
-	}
-
-	for _, cardCount := range cardCounts {
-		if cardCount != 2 && cardCount != 1 {
-			return false
+	var jokers int
+	for card, cardCount := range cardCounts {
+		if card.face == "J" {
+			jokers = cardCount
+		}
+		if cardCount == 2 {
+			return true
 		}
 	}
 
-	return true
+	if jokers >= 1 {
+		return true
+	}
+
+	return false
 }
 
 func (h hand) isHighCard() bool {
-	return len(h.counts()) == 5
+	cardCounts := h.counts()
+
+	for card, cardCount := range cardCounts {
+		if card.face == "J" {
+			return false
+		}
+
+		if cardCount > 1 {
+			return false
+		}
+	}
 }
 
 func (h hand) strength() int {
@@ -310,6 +346,10 @@ func main() {
 	}
 
 	sortHands(hands)
+
+	for _, h := range hands {
+		fmt.Println(h, h.strength())
+	}
 
 	var totalWinnings int
 	for i, h := range hands {
