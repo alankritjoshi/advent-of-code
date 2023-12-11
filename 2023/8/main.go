@@ -16,6 +16,11 @@ const (
 	right direction = 1
 )
 
+type nodeMarker struct {
+	node   string
+	marker int
+}
+
 func main() {
 	input := flag.String("i", "", "Input File Name")
 
@@ -36,8 +41,10 @@ func main() {
 	r := bufio.NewReader(f)
 
 	var (
-		instructions []direction
-		nodeMap      = make(map[string][2]string)
+		instructions   []direction
+		nodeMap        = make(map[string][2]string)
+		startingNodes  = make([]string, 0)
+		endingNodesMap = make(map[string]bool)
 	)
 
 	for {
@@ -68,6 +75,14 @@ func main() {
 
 		node := lineSplit[0]
 
+		if strings.HasSuffix(node, "A") {
+			startingNodes = append(startingNodes, node)
+		}
+
+		if strings.HasSuffix(node, "Z") {
+			endingNodesMap[node] = true
+		}
+
 		nextNodesStr := lineSplit[1]
 		nextNodesStr = strings.Trim(nextNodesStr, "()")
 		nextNodes := strings.Split(nextNodesStr, ", ")
@@ -75,30 +90,70 @@ func main() {
 		nodeMap[node] = [2]string{nextNodes[0], nextNodes[1]}
 	}
 
-	var (
-		currentNode      = "AAA"
-		instructionIndex = -1
-		steps            = 0
-	)
+	endings := make([]int, len(startingNodes))
 
-	for currentNode != "ZZZ" {
-		instructionIndex++
-		steps++
+	// for each node, find the steps required to reach ending node until we starting loop for the same instruction
+	for i, startingNode := range startingNodes {
+		var (
+			currentNode = startingNode
+			visitedMap  = make(map[string]bool)
 
-		if instructionIndex == len(instructions) {
-			instructionIndex = 0
-		} else if instructionIndex > len(instructions) {
-			log.Fatalf("instruction index out of bounds: %d", instructionIndex)
+			steps            = 1
+			instructionIndex int
+		)
+
+		for {
+			// reset instruction index if we reach the end of the instructions
+			if instructionIndex == len(instructions) {
+				instructionIndex = 0
+			}
+
+			direction := instructions[instructionIndex]
+
+			currentNode = nodeMap[currentNode][direction]
+
+			// node-instruction to check if we've visited it already
+			_, ok := visitedMap[fmt.Sprintf("%s-%d", currentNode, instructionIndex)]
+			if ok {
+				break
+			}
+
+			if !ok {
+				visitedMap[fmt.Sprintf("%s-%d", currentNode, instructionIndex)] = true
+			}
+
+			// record the ending when found
+			_, ok = endingNodesMap[currentNode]
+			if ok {
+				endings[i] = steps
+			}
+
+			instructionIndex++
+			steps++
 		}
-
-		direction := instructions[instructionIndex]
-
-		if _, ok := nodeMap[currentNode]; !ok {
-			log.Fatalf("node %s not found in map", currentNode)
-		}
-
-		currentNode = nodeMap[currentNode][direction]
 	}
 
-	fmt.Println(steps)
+	// lcm of all the steps required to reach the ending nodes
+	fmt.Println(lcm(endings[0], endings[1], endings[2:]...))
+}
+
+// find Greatest Common Divisor (gcd) via Euclidean algorithm
+func gcd(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+// find Least Common Multiple (lcm) via GCD
+func lcm(a, b int, integers ...int) int {
+	result := a * b / gcd(a, b)
+
+	for i := 0; i < len(integers); i++ {
+		result = lcm(result, integers[i])
+	}
+
+	return result
 }
