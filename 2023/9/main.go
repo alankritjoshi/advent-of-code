@@ -55,7 +55,7 @@ func main() {
 
 		var (
 			currentNums = nums
-			lastNums    = []int{nums[len(nums)-1]}
+			markerNums  = []int{nums[0]}
 		)
 
 		for {
@@ -70,9 +70,9 @@ func main() {
 				// track if all nums for next iteration are zero
 				zeroNums = zeroNums && nextNum == 0
 
-				// if last comparison, add to lastNums
-				if i == len(currentNums)-2 {
-					lastNums = append(lastNums, nextNum)
+				// if first comparison, add to markerNums
+				if i == 0 {
+					markerNums = append(markerNums, nextNum)
 				}
 
 				nextNums = append(nextNums, nextNum)
@@ -86,10 +86,13 @@ func main() {
 			currentNums = nextNums
 		}
 
-		// sum of last nums will give the next number in the sequence
-		for _, num := range lastNums {
-			total += num
+		// calculate the first number in the sequence
+		historyPrediction := markerNums[len(markerNums)-1]
+		for i := len(markerNums) - 2; i >= 0; i-- {
+			historyPrediction = markerNums[i] - historyPrediction
 		}
+
+		total += historyPrediction
 	}
 
 	fmt.Println(total)
