@@ -14,10 +14,10 @@ type direction struct {
 }
 
 var (
-	north = direction{0, 1}
-	south = direction{0, -1}
-	east  = direction{1, 0}
-	west  = direction{-1, 0}
+	north = direction{-1, 0}
+	south = direction{1, 0}
+	east  = direction{0, 1}
+	west  = direction{0, -1}
 )
 
 type pipeType struct {
@@ -38,27 +38,31 @@ type location struct {
 }
 
 type moveable interface {
-	getNeighbours(x, y int) []location
-	canEnterFrom(d direction) bool
+	getNeighbours() []location
+	enterFrom(d direction) bool
 }
 
 type pipe struct {
 	pipeType
+	status [2]bool
 }
 
-func (p pipe) getNeighbours(x, y int) []location {
+func (p pipe) getNeighbours() []location {
 	var neighbours []location
 
-	for _, d := range p.ends {
-		neighbours = append(neighbours, location{x + d.x, y + d.y})
+	for i, d := range p.ends {
+		if !p.status[i] {
+			neighbours = append(neighbours, location(d))
+		}
 	}
 
 	return neighbours
 }
 
-func (p pipe) canEnterFrom(d direction) bool {
-	for _, e := range p.ends {
-		if e == d {
+func (p *pipe) enterFrom(d direction) bool {
+	for i, e := range p.ends {
+		if !p.status[i] && e.x == d.x && e.y == d.y {
+			p.status[i] = true
 			return true
 		}
 	}
@@ -71,17 +75,17 @@ type (
 	start  string
 )
 
-func (s start) getNeighbours(x, y int) []location {
+func (s start) getNeighbours() []location {
 	return []location{
-		{x + 1, y},
-		{x - 1, y},
-		{x, y + 1},
-		{x, y - 1},
+		{1, 0},
+		{-1, 0},
+		{0, 1},
+		{0, -1},
 	}
 }
 
-func (s start) canEnterFrom(d direction) bool {
-	return true
+func (s start) enterFrom(d direction) bool {
+	return false
 }
 
 const (
@@ -92,17 +96,29 @@ const (
 func newPipe(pipeStr string) (*pipe, error) {
 	switch pipeStr {
 	case "-":
-		return &pipe{horizontal}, nil
+		return &pipe{
+			pipeType: horizontal,
+		}, nil
 	case "|":
-		return &pipe{vertical}, nil
+		return &pipe{
+			pipeType: vertical,
+		}, nil
 	case "L":
-		return &pipe{lBend}, nil
+		return &pipe{
+			pipeType: lBend,
+		}, nil
 	case "J":
-		return &pipe{jBend}, nil
+		return &pipe{
+			pipeType: jBend,
+		}, nil
 	case "7":
-		return &pipe{qBend}, nil
+		return &pipe{
+			pipeType: qBend,
+		}, nil
 	case "F":
-		return &pipe{fBend}, nil
+		return &pipe{
+			pipeType: fBend,
+		}, nil
 	default:
 		return nil, fmt.Errorf("invalid pipe type: %s", pipeStr)
 	}
@@ -170,23 +186,31 @@ func main() {
 		current = startLocation
 	)
 
-	for steps == 0 || current != startLocation {
-		for _, n := range graph[current].getNeighbours(current.x, current.y) {
-			var o moveable
+	for {
+		var nextFound bool
+
+		for _, n := range graph[current].getNeighbours() {
 			var ok bool
 
-			if o, ok = graph[n]; !ok {
+			newLocation := location{current.x + n.x, current.y + n.y}
+
+			if _, ok = graph[newLocation]; !ok {
 				continue
 			}
 
-			fmt.Println(direction{n.x - current.x, n.y - current.y})
-
-			if ok && o.canEnterFrom(direction{n.x - current.x, n.y - current.y}) {
-				current = n
-				steps++
+			if ok = graph[newLocation].enterFrom(direction{-n.x, -n.y}); ok {
+				current = newLocation
+				nextFound = true
+				break
 			}
+		}
+
+		steps++
+
+		if !nextFound {
+			break
 		}
 	}
 
-	fmt.Println(steps)
+	fmt.Println(int(steps / 2))
 }
