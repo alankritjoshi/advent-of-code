@@ -45,8 +45,9 @@
 // The 8 points are connected to the outside of the loop via ~ symbols, thus, they can be searched using DFS/BFS
 //
 // Reasoning:
-// 1. The islands which will be OUTSIDE the loop can contain tiles (groundSymbol and non-loop pipes) but these WILL NOT be part of the answer
-// 2. The ONLY island that will be INSIDE the loop will contain the tiles that WILL part of the answer
+// 1. The ONLY island that will be INSIDE the loop will contain the tiles (groundSymbol and non-loop pipes) that WILL part of the answer
+// 2. The islands which will be OUTSIDE the loop can also contain tiles (groundSymbol and non-loop pipes) but these WILL NOT be part of the answer
+// 3. An island is OUTSIDE, if any of its tiles can reach out-of-bounds
 //
 // Steps:
 // 1. perform DFS/BFS on all symbols that are NOT in the loop to find these islands
