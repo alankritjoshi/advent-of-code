@@ -1,4 +1,4 @@
-// Bloat the graph by SCALAR value to "loosen" the loop so that the loop can be distinguished from the rest of the graph
+// Scale the graph by 2 to "loosen" the loop so that the loop can be distinguished from the rest of the graph
 //
 // e.g.,
 //
@@ -13,10 +13,10 @@
 // .L--JL--J.
 // ..........
 //
-// If bloated by SCALAR=2, it becomes this
+// # If scaled by 2x, it becomes this
 //
 // where,
-// ~ -> new "bloated" locations
+// ~ -> new gaps between the scaled tiles
 // x -> plugged gaps that are part of the loop
 //
 // # This allows confirming that the 8 points are NOT part of the loop
@@ -45,12 +45,12 @@
 // The 8 points are connected to the outside of the loop via ~ symbols, thus, they can be searched using DFS/BFS
 //
 // Reasoning:
-// 1. The ONLY island that will be INSIDE the loop will contain the tiles (groundSymbol and non-loop pipes) that WILL part of the answer
+// 1. The ONLY island that will be INSIDE the loop will contain the tiles (groundSymbol and non-loop pipes) that WILL be part of the answer
 // 2. The islands which will be OUTSIDE the loop can also contain tiles (groundSymbol and non-loop pipes) but these WILL NOT be part of the answer
 // 3. An island is OUTSIDE, if any of its tiles can reach out-of-bounds
 //
 // Steps:
-// 1. perform DFS/BFS on all symbols that are NOT in the loop to find these islands
+// 1. perform DFS/BFS on all symbols that are NOT making the loop to find these islands
 // 2. the islands which CAN reach out-of-bounds must be the islands OUTSIDE the loop
 // 3. the ONLY remaining island INSIDE the loop will never be out-of-bounds and the points within WILL be the answer
 package main
