@@ -7,12 +7,12 @@ layout {
           }
           pane split_direction="horizontal" {
               name "Tests"
-              pane command="poetry" {
+              pane command="~/.local/bin/poetry" {
                   name "Test - Sample"
                   start_suspended false
                   args "run" "python" "../../hotreload.py" "-s" "./main.py -i sample.txt" 
               }
-              pane command="poetry" {
+              pane command="~/.local/bin/poetry" {
                   name "Test - Actual"
                   start_suspended false
                   args "run" "python" "../../hotreload.py" "-s" "./main.py -i input.txt" 
