@@ -1,5 +1,5 @@
 import argparse
-import heapq
+from collections import Counter
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
@@ -10,7 +10,7 @@ def main() -> None:
 
     input_file_name = args.input
 
-    a, b = [], []
+    a, b = [],[]
 
     with open(input_file_name, "r") as f:
         while True:
@@ -20,12 +20,15 @@ def main() -> None:
                 break
 
             first, second = line.split()
-            heapq.heappush(a, int(first))
-            heapq.heappush(b, int(second))
+            a.append(int(first))
+            b.append(int(second))
+
+    b_counter = Counter(b)
 
     total = 0
-    for _ in range(len(a)):
-        total += abs(heapq.heappop(a) - heapq.heappop(b))
+    for num in a:
+        if num in b_counter:
+            total += num * b_counter[num]
 
     print(total)
 
