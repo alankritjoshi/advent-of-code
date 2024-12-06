@@ -44,9 +44,22 @@ def main() -> None:
             seen.add(node)
         return True
 
+    def fix_topological_order(nodes: list[int]) -> list[int]:
+        seen = set()
+        for i in range(len(nodes)):
+            for neighbor in graph[nodes[i]]:
+                if neighbor in seen:
+                    to_swap = nodes.index(neighbor) # find the neighbor that shouldn't have been seen first
+                    nodes[i], nodes[to_swap] = nodes[to_swap], nodes[i] # and swap
+                    nodes = fix_topological_order(nodes) # hacky but ran this program again from beginning lol
+                    return nodes
+            seen.add(nodes[i])
+        return nodes
+
     middles = 0
     for update in updates:
-        if check_topological_order(update):
+        if not check_topological_order(update):
+            update = fix_topological_order(update)
             middles  += update[len(update) // 2]
 
     print(middles)
