@@ -30,11 +30,14 @@ def main() -> None:
 
     DEFAULT_DIRECTION = (-1, 0)
 
-    def traverse(x: int, y: int, direction: tuple[int, int]) -> int:
-        seen = set()
+    def has_loop(x: int, y: int, direction: tuple[int, int]) -> int:
+        seen: set[tuple[int, int, int, int]] = set()
         
         while True:
-            seen.add((x, y))
+            if (x, y, *direction) in seen:
+                return True
+
+            seen.add((x, y, *direction))
 
             ahead = (x + direction[0], y + direction[1])
 
@@ -45,13 +48,54 @@ def main() -> None:
             # Change direction if obstacle ahead
             if grid[ahead[0]][ahead[1]] == "#":
                 direction = (direction[1], -direction[0]) # Turn 90 deg to the right
+                # This is important, you don't want to walk because your new direction
+                #   might be pointing to another obstacle
+                # Test with
+                # ..#.
+                # ...#
+                # ..^.
+                continue
 
             # Move forward
             x += direction[0]
             y += direction[1]
 
-        return len(seen)
+        return False
 
+    def traverse(x: int, y: int, direction: tuple[int, int]) -> int:
+        possible_loop_obstructions: set[tuple[int, int]] = set()
+
+        while True:
+            ahead = (x + direction[0], y + direction[1])
+
+            # Check bounds. If out, it means patrol is over
+            if not (0 <= ahead[0] < len(grid) and 0 <= ahead[1] < len(grid[0])):
+                break
+
+            # Change direction if obstacle ahead
+            if grid[ahead[0]][ahead[1]] == "#":
+                direction = (direction[1], -direction[0]) # Turn 90 deg to the right
+                # This is important, you don't want to walk because your new direction
+                #   might be pointing to another obstacle
+                # Test with
+                # ..#.
+                # ...#
+                # ..^.
+                continue
+
+            if ahead != start and ahead not in possible_loop_obstructions:
+                # Place temporary obstruction
+                grid[ahead[0]][ahead[1]] = "#"
+                if has_loop(*start, DEFAULT_DIRECTION): # Check if the new obstruction causes a loop
+                    possible_loop_obstructions.add(ahead)
+                # Remove temporary obstruction
+                grid[ahead[0]][ahead[1]] = "."
+            
+            # Move forward
+            x += direction[0]
+            y += direction[1]
+
+        return len(possible_loop_obstructions)
 
     print(traverse(*start, DEFAULT_DIRECTION))
 
