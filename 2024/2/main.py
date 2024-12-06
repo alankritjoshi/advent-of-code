@@ -18,23 +18,24 @@ def main() -> None:
             if not line:
                 break
 
-            prev = None
-            nums = []
-            diffs = []
+            numbers = []
             for num_str in line.split():
                 num = int(num_str)
-                if prev is not None:
-                    diff = num - prev
-                    diffs.append(diff)
-                prev = num
-                nums.append(num)
+                numbers.append(num)
 
+            def is_valid(nums: list[int]) -> bool:
+                is_valid_diff = all(abs(nums[i] - nums[i+1]) >= 1 and abs(nums[i] - nums[i+1]) <= 3 for i in range(len(nums)-1))
+                is_increasing = all(nums[i] >= nums[i+1] for i in range(len(nums)-1))
+                is_decreasing = all(nums[i] <= nums[i+1] for i in range(len(nums)-1))
+                return is_valid_diff and (is_increasing or is_decreasing)
 
-            is_valid_diff = all(abs(diff) >= 1 and abs(diff) <= 3 for diff in diffs)
-            is_increasing = all(nums[i] >= nums[i+1] for i in range(len(nums)-1))
-            is_decreasing = all(nums[i] <= nums[i+1] for i in range(len(nums)-1))
+            def can_make_valid(nums: list[int]) -> bool:
+                for i in range(len(nums)):
+                    if is_valid(nums[:i] + nums[i+1:]):
+                        return True
+                return False
 
-            if is_valid_diff and (is_increasing or is_decreasing):
+            if is_valid(numbers) or can_make_valid(numbers):
                 total += 1
                 
     print(total)
