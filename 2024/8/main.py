@@ -1,4 +1,5 @@
 import argparse
+from enum import Enum
 import itertools
 import math
 from collections import defaultdict
@@ -35,11 +36,34 @@ def main() -> None:
 
     def validate_bound(x: int, y: int) -> bool:
         return 0 <= x < rows and 0 <= y < cols
+
+    class Direction(Enum):
+        POSITIVE = 1
+        NEGATIVE = -1
     
-    def find_antinodes(a: tuple[int, int], b: tuple[int, int]) -> list[tuple[int, int]]:
-        first = (2*a[0] - b[0], 2*a[1] - b[1])
-        second = (2*b[0] - a[0], 2*b[1] - a[1])
-        return [antinode for antinode in (first, second) if validate_bound(*antinode)]
+    def find_antinodes(a: tuple[int, int], b: tuple[int, int]) -> set[tuple[int, int]]:
+        """Apply general formula in both positive and negative directions"""
+
+        def find_antinode(x: tuple[int, int], y: tuple[int, int], factor: int) -> tuple[int, int]:
+            """General formula"""
+
+            return (x[0] + factor * (x[0] - y[0]), x[1] + factor * (x[1] - y[1]))
+
+        def find_antinodes_in_direction(a, b, direction: Direction) -> set[tuple[int, int]]:
+            """Apply general formula in just one direction until out of bounds"""
+
+            antis: set[tuple[int, int]] = set()
+            factor = 0
+            while True:
+                antinode = find_antinode(a, b, factor)
+                if not validate_bound(*antinode):
+                    break
+                antis.add(antinode)
+                factor += direction.value
+            return antis
+
+        return find_antinodes_in_direction(a, b, Direction.POSITIVE) \
+               | find_antinodes_in_direction(a, b, Direction.NEGATIVE)
 
     for positions in frequencies.values():
         for a, b in itertools.combinations(positions, 2):
