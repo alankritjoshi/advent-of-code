@@ -51,36 +51,35 @@ def main() -> None:
 
                 block.append(segment)
 
+
             file_index = len(block) - 1
 
-            while spaces and file_index > spaces[0].index:
+            while spaces and file_index >= 0:
                 segment = block[file_index]
 
-                while True:
-                    if not spaces:
-                        break
+                empty_spaces: set[int] = set()
 
+                for space_index, space in enumerate(spaces):
                     if not segment.vals:
                         break
 
+                    if space.free < segment.vals[-1][1]:
+                        continue
+
+                    if space.index > segment.index:
+                        break
+
                     file_number, size = segment.vals.pop()
-                    space = spaces.popleft()
 
-                    filled = 0
-                    if space.free <= size:
-                        filled = space.free
-                        size -= space.free
-                        space.free = 0
-                        if size != 0:
-                            segment.vals.append((file_number, size))
-                    else:
-                        filled = size
-                        space.free -= filled
-                        spaces.appendleft(space)
-                        size = 0
+                    space.free -= size
+                    if not space.free:
+                        empty_spaces.add(space_index)
 
-                    block[space.index].vals.append((file_number, filled))
+                    segment.free += size
 
+                    block[space.index].vals.append((file_number, size))
+
+                spaces = deque([space for index, space in enumerate(spaces) if index not in empty_spaces])
                 file_index -= 1
 
             total = 0
@@ -91,6 +90,9 @@ def main() -> None:
                     for _ in range(size):
                         total += (file_number * index)
                         index += 1
+
+                for _ in range(segment.free):
+                    index += 1
 
             print(total)
 
