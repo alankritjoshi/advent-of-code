@@ -1,4 +1,5 @@
 import argparse
+from enum import Enum, auto
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
@@ -20,15 +21,26 @@ def main() -> None:
 
             grid.append([int(ch) if ch.isnumeric() else ch for ch in line.strip()])
 
-    def climb(curr_x: int, curr_y: int, visited: set[tuple[int, int]]) -> int:
+    class Direction(Enum):
+        LEFT = auto()
+        RIGHT = auto()
+        UP = auto()
+        DOWN = auto()
+
+    def climb(curr_x: int, curr_y: int, path: list[Direction], visited: set[tuple[int, int]], unique: list[list[Direction]]) -> list[list[Direction]]:
         curr_val = grid[curr_x][curr_y] 
         assert type(curr_val) is int
 
         if curr_val == 9:
-            return 1
+            return unique + [path]
 
-        summits = 0
-        for ii, jj in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+        new_unique = []
+        for ii, jj, direction in [
+            (0, 1, Direction.DOWN), 
+            (0, -1, Direction.UP), 
+            (1, 0, Direction.RIGHT), 
+            (-1, 0, Direction.LEFT)
+        ]:
             neigh_x, neigh_y = curr_x + ii, curr_y + jj
             if (
                 not (0 <= neigh_x < len(grid) and 0 <= neigh_y < len(grid[0]))
@@ -37,16 +49,30 @@ def main() -> None:
                 or grid[neigh_x][neigh_y] != curr_val + 1
             ):
                 continue
-            visited.add((neigh_x, neigh_y))
-            summits += climb(neigh_x, neigh_y, visited)
 
-        return summits
+            visited.add((neigh_x, neigh_y))
+            new_unique.extend(
+                climb(
+                    neigh_x, 
+                    neigh_y, 
+                    path + [direction], 
+                    visited,
+                    unique,
+                )
+            )
+            visited.remove((neigh_x, neigh_y))
+
+        return unique + new_unique
 
     total = 0
     for x in range(len(grid)):
         for y in range(len(grid)):
             if grid[x][y] == 0:
-                total += climb(x, y, set([(x, y)]))
+                paths = climb(x, y, [], set([(x, y)]), [])
+                unique: set[tuple[Direction, ...]] = set()
+                for path in paths:
+                    unique.add(tuple(path))
+                total += len(unique)
 
     print(total)
 
