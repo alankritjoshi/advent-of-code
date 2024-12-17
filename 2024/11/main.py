@@ -1,11 +1,5 @@
 import argparse
-from dataclasses import dataclass
-from typing import Optional
-
-@dataclass
-class Node:
-    val: int
-    next: Optional['Node'] = None
+from collections import Counter
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
@@ -23,44 +17,27 @@ def main() -> None:
             if not line:
                 break
 
-            stones: list[int] = [int(ch) for ch in line.strip().split()]
+            stones: Counter[int] = Counter([int(ch) for ch in line.strip().split()])
 
-            head: Node | None = None
+            for _ in range(75):
+                current: Counter[int] = Counter()
 
-            curr = None
-            for stone in stones:
-                node = Node(val=stone, next=None)
-                if head is None:
-                    head = node
-                    curr = node
-                else:
-                    assert curr is not None
-                    curr.next = node
-                    curr = node
-
-            for _ in range(25):
-                curr = head
-                while curr:
-                    val = curr.val
-                    str_val = str(val)
-                    if val == 0:
-                        curr.val = 1
-                        curr = curr.next
-                    elif len(str_val) % 2 == 0:
+                for stone, count in stones.items():
+                    if stone == 0:
+                        current[1] += count
+                    elif len(str(stone)) % 2 == 0:
+                        str_val = str(stone)
                         first, second = str_val[:len(str_val) // 2], str_val[len(str_val) // 2:]
-                        curr.val = int(first)
-                        old_next = curr.next
-                        curr.next = Node(val=int(second), next=old_next)
-                        curr = old_next
+                        current[int(first)] += count
+                        current[int(second)] += count
                     else:
-                        curr.val *= 2024
-                        curr = curr.next
+                        current[stone*2024] += count
+
+                stones = current
 
             total = 0
-            curr = head
-            while curr:
-                total += 1
-                curr = curr.next
+            for stone, count in stones.items():
+                total += count
 
             print(total)
 
