@@ -9,6 +9,20 @@ readme = "README.md"
 python = "^3.12"
 watchdog = "^3.0.0"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.3"
+
+[tool.ruff]
+line-length = 120
+exclude = ["**/.venv", "**/__pycache__"]
+
+[tool.ruff.lint]
+select = ["I", "B", "C", "E", "F", "W", "B9"]
+ignore = ["C901", "E203", "E251", "E266", "F403", "E262", "W291"]
+
+[tool.pyright]
+type-checking-mode = "strict"
+exclude = ["**/.venv", "**/__pycache__"]
 
 [build-system]
 requires = ["poetry-core"]
