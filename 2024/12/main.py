@@ -1,5 +1,23 @@
 import argparse
-from types import GeneratorType
+from collections import defaultdict
+from enum import Enum, auto
+
+class Direction(Enum):
+    UP = "up"
+    DOWN = "down"
+    LEFT = "left"
+    RIGHT = "right"
+
+    @property
+    def is_vertical(self):
+        return self in {Direction.LEFT, Direction.RIGHT}
+
+    @property
+    def is_horizontal(self):
+        return self in {Direction.UP, Direction.DOWN}
+
+
+Sides = defaultdict[tuple[Direction, int, int], set[int]] 
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
@@ -21,26 +39,50 @@ def main() -> None:
 
             grid.append([ch for ch in line.strip()])
 
-    def search(curr_x: int, curr_y: int, char: str, perimeter: int, area: int, visited: set[tuple[int, int]]) -> tuple[int, int]:
+
+    def search(
+        curr_x: int, 
+        curr_y: int, 
+        char: str, 
+        sides: Sides,
+        area: int, 
+        visited: set[tuple[int, int]]
+    ) -> tuple[Sides, int]:
         grid[curr_x][curr_y] = "*"
         visited.add((curr_x, curr_y))
 
-        for i, j in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        for i, j, direction in (
+            (1, 0, Direction.DOWN), 
+            (-1, 0, Direction.UP),
+            (0, 1, Direction.RIGHT),
+            (0, -1, Direction.LEFT),
+        ):
             neigh_x, neigh_y = curr_x + i, curr_y + j
             if not (0 <= neigh_x < len(grid) and 0 <= neigh_y < len(grid[0])):
-                perimeter += 1
+                sides[
+                    (
+                        direction,
+                        neigh_x if direction.is_horizontal else 0, 
+                        neigh_y if direction.is_vertical else 0,
+                    )
+                ].add(neigh_y if direction.is_horizontal else neigh_x)
             elif (neigh_x, neigh_y) in visited:
                     continue
             elif grid[neigh_x][neigh_y] == char:
-                curr_perimeter, curr_area = search(neigh_x, neigh_y, char, 0, 0, visited)
-                perimeter += curr_perimeter
+                sides, curr_area = search(neigh_x, neigh_y, char, sides, 0, visited)
                 area += curr_area
             else:
-                perimeter += 1
+                sides[
+                    (
+                        direction,
+                        neigh_x if direction.is_horizontal else 0, 
+                        neigh_y if direction.is_vertical else 0,
+                    )
+                ].add(neigh_y if direction.is_horizontal else neigh_x)
 
         grid[curr_x][curr_y] = None
 
-        return perimeter , area + 1
+        return sides, area + 1
 
     total = 0
     for i in range(len(grid)):
@@ -49,9 +91,24 @@ def main() -> None:
             if symbol is None:
                 continue
 
-            perimeter, area = search(i, j, symbol, 0, 0, set())
+            s: Sides = defaultdict(set)
+            s, area = search(i, j, symbol, s, 0, set())
+            sides_count = 0
 
-            total += (perimeter * area)
+            for edges in s.values():
+                edges = sorted(edges)
+                count = 0
+                if len(edges) > 1:
+                    count = 1
+                    for x in range(1, len(edges)):
+                        if edges[x-1] + 1 != edges[x]:
+                            count += 1
+                else:
+                    count = len(edges)
+
+                sides_count += count
+
+            total += (sides_count * area)
 
     print(total)
 
