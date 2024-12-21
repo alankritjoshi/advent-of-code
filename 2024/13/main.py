@@ -57,8 +57,8 @@ def main() -> None:
             numbers = re.findall(r'\=(\d+)', line)
             if numbers:
                 a, b = [int(num) for num in numbers]
-                curr_eq1.append(a)
-                curr_eq2.append(b)
+                curr_eq1.append(a + 10**13)
+                curr_eq2.append(b + 10**13)
 
             if len(curr_eq1) == 3:
                 assert len(curr_eq2) == 3
