@@ -38,7 +38,7 @@ def main() -> None:
 
             grid[x][y].append((-1, *velocity))
 
-    for iteration in range(100):
+    for iteration in range(1000000):
         for x in range(len(grid)):
             for y in range(len(grid[0])):
                 while grid[x][y] and grid[x][y][0][0] < iteration:
@@ -47,25 +47,38 @@ def main() -> None:
                     grid[new_x][new_y].append((iteration, vel_x, vel_y))
 
 
-    rows, cols = len(grid), len(grid[0])
-    central_row, central_col = rows // 2, cols // 2
+        # Print the grid when 10 or more consecutive robots exist in a row and break
+        p: list[list[int]] = []
+        show = False
+        for i in range(len(grid)):
+            l: list[int] = []
+            prev: bool = False
+            m: int = -1
+            consec: int = 0
+            for j in range(len(grid[0])):
+                l.append(len(grid[i][j]))
+                if prev:
+                    if len(grid[i][j]) > 0:
+                        consec = consec + 1
+                    else:
+                        m = max(m, consec)
+                        consec = 0
+                        prev = False
+                else:
+                    if len(grid[i][j]) > 0:
+                        consec = 1
+                        prev = True
 
-    quadrants = [
-        (0, central_row, 0, central_col), # Top left
-        (0, central_row, central_col + 1, cols), # Top right
-        (central_row + 1, rows, 0, central_col), # Bottom left
-        (central_row + 1, rows, central_col + 1, cols), # Bottom right
-    ]
+            if m >= 10:
+                show = True
 
-    total = 1
-    for row_start, row_end, col_start, col_end in quadrants:
-        quad_total = 0
-        for x in range(row_start, row_end):
-            for y in range(col_start, col_end):
-                quad_total += len(grid[x][y])
-        total *= quad_total
+            p.append(l)
 
-    print(total)
+        if show:
+            print(iteration+1)
+            for l in p:
+                print("".join(str(num) if num else "." for num in l))
+            break
 
 
 if __name__ == '__main__':
