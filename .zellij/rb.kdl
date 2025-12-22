@@ -1,0 +1,27 @@
+layout {
+    tab cwd="${YEAR}/${DAY}" {
+      pane split_direction="vertical" {
+          pane edit="main.rb" {
+              name "Editing main.rb"
+              size "65%"
+          }
+          pane split_direction="horizontal" {
+              name "Tests"
+              pane command="~/.local/bin/poetry" {
+                  name "Test - Sample"
+                  start_suspended false
+                  args "run" "python" "../../hotreload.py" "-s" "./main.rb -i sample.txt" 
+              }
+              pane command="~/.local/bin/poetry" {
+                  name "Test - Actual"
+                  start_suspended false
+                  args "run" "python" "../../hotreload.py" "-s" "./main.rb -i input.txt" 
+              }
+          }
+      }
+      pane size=1 borderless=true {
+          plugin location="zellij:compact-bar"
+      }
+    }
+}
+
