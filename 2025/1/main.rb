@@ -46,22 +46,9 @@ class LockPick
                  when 'R' then distance
                  end
 
-      new_distance = @pointer + distance
+      @pointer = (@pointer + distance) % 100
 
-      if new_distance.zero?
-        @clicks += 1
-        p 'yes'
-      elsif new_distance >= 100
-        @clicks += (new_distance / 100)
-        p 'yes'
-      elsif new_distance.negative? && @pointer.nonzero?
-        @clicks += ((new_distance * -1) / 100) + 1
-        p 'yes'
-      end
-
-      @pointer = new_distance % 100
-
-      # @clicks += 1 if @pointer.zero?
+      @clicks += 1 if @pointer.zero?
     end
 
     @clicks
