@@ -39,16 +39,31 @@ class LockPick
       direction = rotation[0]
       distance = rotation[1..].to_i
 
-      p "#{@pointer} - #{rotation}"
-
       distance = case direction
                  when 'L' then distance * -1
                  when 'R' then distance
                  end
 
-      @pointer = (@pointer + distance) % 100
+      new_distance = @pointer + distance
 
-      @clicks += 1 if @pointer.zero?
+      # Positive incomplete rotation
+      if new_distance.positive? && new_distance < 100
+      # Positive complete rotations
+      elsif new_distance >= 100
+        @clicks += (new_distance / 100)
+      # Stuck at zero
+      elsif @pointer.zero? && new_distance.zero?
+      # Started at zero so at least one negative rotation is needed
+      elsif @pointer.zero? && new_distance.negative?
+        @clicks += (-1 * new_distance) / 100
+      # Negative complete rotations
+      elsif @pointer.positive? && new_distance <= 0
+        @clicks += ((-1 * new_distance) / 100) + 1
+      end
+
+      @pointer = new_distance % 100
+
+      # @clicks += 1 if @pointer.zero?
     end
 
     @clicks
