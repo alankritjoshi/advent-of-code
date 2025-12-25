@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "optparse"
+require 'optparse'
 
 def main
   options = {}
 
   parser = OptionParser.new do |opts|
-    opts.banner = "Usage: aoc_runner.rb [options]"
+    opts.banner = 'Usage: aoc_runner.rb [options]'
 
-    opts.on("-i", "--input FILE", "Input file name") do |file|
+    opts.on('-i', '--input FILE', 'Input file name') do |file|
       options[:input] = file
     end
   end
@@ -17,20 +17,24 @@ def main
   parser.parse!
 
   unless options[:input]
-    warn "Missing required option: --input FILE"
+    warn 'Missing required option: --input FILE'
     warn parser
     exit 1
   end
 
   input_file_name = options[:input]
 
-  File.open(input_file_name, "r") do |f|
-    f.each_line do |line|
-      puts line
-    end
+  p Solver.new(File.readlines(input_file_name, chomp: true)).solve
+end
+
+class Solver
+  def initialize(lines)
+    @lines = lines
+  end
+
+  def solve
+    @lines
   end
 end
 
-if $PROGRAM_NAME == __FILE__
-  main
-end
+main if $PROGRAM_NAME == __FILE__
