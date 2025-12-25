@@ -13,8 +13,10 @@ brew install bash httpie gum
 ### Languages
 
 ```sh
-brew install go python pyenv poetry
+brew install go python pyenv poetry ruby
 ```
+
+Or, alternatively, install all of them with [mise](https://mise.jdx.dev)
 
 #### [Go](https://golang.org) 1.21+
 
@@ -25,9 +27,13 @@ go mod download
 #### [Python](https://www.python.org) 3.12+
 
 ```sh
-pyenv install
-pip install poetry
 poetry install
+```
+
+### Ruby
+
+```sh
+bundle install
 ```
 
 ### [OPTIONAL] [Zellij](https://github.com/zellij-org/zellij)
@@ -98,4 +104,3 @@ If using Zellij, edit and run the code with one of the [layouts](.zellij/) corre
 ```sh
 make z
 ```
-
