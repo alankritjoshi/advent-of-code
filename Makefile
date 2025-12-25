@@ -23,6 +23,8 @@ ifeq ($(lang),go)
 	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
 else ifeq ($(lang),py)
 	@ poetry run python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
+else ifeq ($(lang),rb)
+	@ ./$(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)
 else
   @ echo "Unsupported language: $(lang)"
 endif
@@ -33,6 +35,8 @@ ifeq ($(lang),go)
 	@ cd ..
 else ifeq ($(lang),py)
 	@ poetry run python hotreload.py -s "$(year)/$(day)/main.py -i $(year)/$(day)/$(txt)"
+else ifeq ($(lang),rb)
+	@ poetry run python hotreload.py -s "./$(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)"
 else
   @ echo "Unsupported language: $(lang)"
 endif
