@@ -52,8 +52,8 @@ brew install zellij
 ### TL;DR
 
 ```sh
-make setup year=2025 day=2 lang=rb
-make run year=2025 day=2 lang=rb
+make setup year=2025 day=2 lang=rb # If Zellij, make setupz year=2025 day=2 lang=rb
+make run year=2025 day=2 lang=rb   # If Zellij, make z year=2025 day=2 lang=rb
 ```
 
 > NOTE: *year*, *day*, *lang* & *txt* are optional. If not set, the *year*=<*current*>, *day*=*1*, *lang*=*go* and *txt*=*input.txt* are used.
