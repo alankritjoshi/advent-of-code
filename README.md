@@ -13,7 +13,7 @@ brew install bash httpie gum
 ### Languages
 
 ```sh
-brew install go python pyenv poetry ruby
+brew install go python ruby
 ```
 
 Or, alternatively, install all of them with [mise](https://mise.jdx.dev)
@@ -25,6 +25,11 @@ go mod download
 ```
 
 #### [Python](https://www.python.org) 3.12+
+
+Install poetry:
+
+1. `pipx install poetry`
+2. Add pipx's install directory to path i.e., `~/local/bin/`
 
 ```sh
 poetry install
