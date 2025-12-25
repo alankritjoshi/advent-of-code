@@ -49,6 +49,13 @@ brew install zellij
 
 ## Usage
 
+### TL;DR
+
+```sh
+make setup year=2025 day=2 lang=rb
+make run year=2025 day=2 lang=rb
+```
+
 > NOTE: *year*, *day*, *lang* & *txt* are optional. If not set, the *year*=<*current*>, *day*=*1*, *lang*=*go* and *txt*=*input.txt* are used.
 > e.g., `make run year=2023 day=2 lang=py txt=sample.txt`
 
