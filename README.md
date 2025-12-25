@@ -35,7 +35,7 @@ Install poetry:
 poetry install
 ```
 
-### Ruby
+#### Ruby 3.3+
 
 ```sh
 bundle install
