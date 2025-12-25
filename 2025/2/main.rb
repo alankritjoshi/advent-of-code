@@ -36,7 +36,7 @@ class ProductIDValidator
   end
 
   def num_repeats?(num)
-    num.to_s.match?(/^(.+)\1$/)
+    num.to_s.match?(/^(.+)\1+$/)
   end
 
   def solve
