@@ -69,7 +69,7 @@ def main() -> None:
     for x in range(len(grid)):
         for y in range(len(grid)):
             if grid[x][y] == 0:
-                paths = climb(x, y, [], set([(x, y)]), [])
+                paths = climb(x, y, [], {(x, y)}, [])
                 unique: set[tuple[Direction, ...]] = set()
                 for path in paths:
                     unique.add(tuple(path))

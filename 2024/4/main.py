@@ -20,7 +20,7 @@ def main() -> None:
             if not line:
                 break
 
-            grid.append([ch for ch in line.split()[0]])
+            grid.append(list(line.split()[0]))
 
     def find_xmas_counts(i: int, j: int, curr: int, direction: tuple[int, int], answer: list[tuple[int, int]]) -> list[tuple[int, int]]:
         if grid[i][j] != 'MAS'[curr]:

@@ -19,7 +19,7 @@ def main() -> None:
             if not line:
                 break
 
-            grid.append([ch for ch in line.strip()])
+            grid.append(list(line.strip()))
 
     start: tuple[int, int] = (-1, -1)
 
