@@ -2,6 +2,7 @@ import argparse
 import re
 from collections import deque
 
+
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 

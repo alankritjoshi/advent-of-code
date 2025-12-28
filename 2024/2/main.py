@@ -1,5 +1,6 @@
 import argparse
 
+
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 
@@ -37,7 +38,7 @@ def main() -> None:
 
             if is_valid(numbers) or can_make_valid(numbers):
                 total += 1
-                
+
     print(total)
 
 

@@ -1,6 +1,6 @@
 import argparse
-
 from dataclasses import dataclass
+
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")

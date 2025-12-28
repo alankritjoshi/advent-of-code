@@ -1,8 +1,8 @@
 import argparse
-from enum import Enum
 import itertools
-import math
 from collections import defaultdict
+from enum import Enum
+
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
@@ -40,7 +40,7 @@ def main() -> None:
     class Direction(Enum):
         POSITIVE = 1
         NEGATIVE = -1
-    
+
     def find_antinodes(a: tuple[int, int], b: tuple[int, int]) -> set[tuple[int, int]]:
         """Apply general formula in both positive and negative directions"""
 

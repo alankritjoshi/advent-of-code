@@ -1,6 +1,7 @@
 import argparse
 from enum import Enum
 
+
 class Direction(Enum):
     UP = (-1, 0)
     DOWN = (1, 0)
@@ -17,7 +18,7 @@ class Direction(Enum):
             return cls.LEFT
         elif sym == '>':
             return cls.RIGHT
-        
+
         raise ValueError("Invalid symbol: ", sym)
 
 def main() -> None:

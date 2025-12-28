@@ -1,6 +1,6 @@
 import argparse
 from collections import defaultdict
-import math
+
 
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")

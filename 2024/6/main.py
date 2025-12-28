@@ -1,5 +1,6 @@
 import argparse
 
+
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 
@@ -8,7 +9,7 @@ def main() -> None:
     args = args.parse_args()
 
     input_file_name = args.input
-    
+
     grid: list[list[str]] = []
 
     with open(input_file_name, "r") as f:
@@ -21,7 +22,7 @@ def main() -> None:
             grid.append([ch for ch in line.strip()])
 
     start: tuple[int, int] = (-1, -1)
-    
+
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             if grid[i][j] == "^":
@@ -32,7 +33,7 @@ def main() -> None:
 
     def has_loop(x: int, y: int, direction: tuple[int, int]) -> int:
         seen: set[tuple[int, int, int, int]] = set()
-        
+
         while True:
             if (x, y, *direction) in seen:
                 return True
@@ -90,7 +91,7 @@ def main() -> None:
                     possible_loop_obstructions.add(ahead)
                 # Remove temporary obstruction
                 grid[ahead[0]][ahead[1]] = "."
-            
+
             # Move forward
             x += direction[0]
             y += direction[1]

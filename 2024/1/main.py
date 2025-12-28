@@ -1,6 +1,7 @@
 import argparse
 from collections import Counter
 
+
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 

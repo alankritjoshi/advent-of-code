@@ -1,6 +1,7 @@
 import argparse
 from collections import defaultdict
-from enum import Enum, auto
+from enum import Enum
+
 
 class Direction(Enum):
     UP = "up"

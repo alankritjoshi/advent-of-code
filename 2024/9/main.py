@@ -1,6 +1,7 @@
 import argparse
-from dataclasses import dataclass
 from collections import deque
+from dataclasses import dataclass
+
 
 @dataclass
 class Segment:
