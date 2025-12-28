@@ -6,7 +6,7 @@ from collections import deque
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 
-    args.add_argument("-i" , "--input", type=str, required=True, help="Input File Name")
+    args.add_argument("-i", "--input", type=str, required=True, help="Input File Name")
 
     args = args.parse_args()
 
@@ -47,17 +47,16 @@ def main() -> None:
                     new_x, new_y = move(len(grid), x, vel_x), move(len(grid[0]), y, vel_y)
                     grid[new_x][new_y].append((iteration, vel_x, vel_y))
 
-
         # Print the grid when 10 or more consecutive robots exist in a row and break
         p: list[list[int]] = []
         show = False
         for i in range(len(grid)):
-            l: list[int] = []
+            lst: list[int] = []
             prev: bool = False
             m: int = -1
             consec: int = 0
             for j in range(len(grid[0])):
-                l.append(len(grid[i][j]))
+                lst.append(len(grid[i][j]))
                 if prev:
                     if len(grid[i][j]) > 0:
                         consec = consec + 1
@@ -73,15 +72,14 @@ def main() -> None:
             if m >= 10:
                 show = True
 
-            p.append(l)
+            p.append(lst)
 
         if show:
-            print(iteration+1)
-            for l in p:
-                print("".join(str(num) if num else "." for num in l))
+            print(iteration + 1)
+            for lst in p:
+                print("".join(str(num) if num else "." for num in lst))
             break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-

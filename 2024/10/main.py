@@ -5,7 +5,7 @@ from enum import Enum, auto
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 
-    args.add_argument("-i" , "--input", type=str, required=True, help="Input File Name")
+    args.add_argument("-i", "--input", type=str, required=True, help="Input File Name")
 
     args = args.parse_args()
 
@@ -28,8 +28,14 @@ def main() -> None:
         UP = auto()
         DOWN = auto()
 
-    def climb(curr_x: int, curr_y: int, path: list[Direction], visited: set[tuple[int, int]], unique: list[list[Direction]]) -> list[list[Direction]]:
-        curr_val = grid[curr_x][curr_y] 
+    def climb(
+        curr_x: int,
+        curr_y: int,
+        path: list[Direction],
+        visited: set[tuple[int, int]],
+        unique: list[list[Direction]],
+    ) -> list[list[Direction]]:
+        curr_val = grid[curr_x][curr_y]
         assert type(curr_val) is int
 
         if curr_val == 9:
@@ -37,10 +43,10 @@ def main() -> None:
 
         new_unique = []
         for ii, jj, direction in [
-            (0, 1, Direction.DOWN), 
-            (0, -1, Direction.UP), 
-            (1, 0, Direction.RIGHT), 
-            (-1, 0, Direction.LEFT)
+            (0, 1, Direction.DOWN),
+            (0, -1, Direction.UP),
+            (1, 0, Direction.RIGHT),
+            (-1, 0, Direction.LEFT),
         ]:
             neigh_x, neigh_y = curr_x + ii, curr_y + jj
             if (
@@ -54,9 +60,9 @@ def main() -> None:
             visited.add((neigh_x, neigh_y))
             new_unique.extend(
                 climb(
-                    neigh_x, 
-                    neigh_y, 
-                    path + [direction], 
+                    neigh_x,
+                    neigh_y,
+                    path + [direction],
                     visited,
                     unique,
                 )
@@ -77,6 +83,6 @@ def main() -> None:
 
     print(total)
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == "__main__":
+    main()

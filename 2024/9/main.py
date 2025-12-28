@@ -9,16 +9,15 @@ class Segment:
     vals: deque[tuple[int, int]]
     free: int = 0
 
+
 def main() -> None:
     args = argparse.ArgumentParser(description="AoC runner")
 
-    args.add_argument("-i" , "--input", type=str, required=True, help="Input File Name")
+    args.add_argument("-i", "--input", type=str, required=True, help="Input File Name")
 
     args = args.parse_args()
 
     input_file_name = args.input
-
-
 
     with open(input_file_name, "r") as f:
         while True:
@@ -31,7 +30,7 @@ def main() -> None:
             spaces: deque[Segment] = deque([])
 
             def printer():
-                for segment in block:
+                for segment in block:  # noqa
                     print("(", end=" ")
                     for file_number, count in segment.vals:
                         print(" ".join(str(file_number) for _ in range(count)), end=" ")
@@ -51,7 +50,6 @@ def main() -> None:
                     file_number += 1
 
                 block.append(segment)
-
 
             file_index = len(block) - 1
 
@@ -89,7 +87,7 @@ def main() -> None:
                 for file_number, size in segment.vals:
                     # print(file_number, end=" ")
                     for _ in range(size):
-                        total += (file_number * index)
+                        total += file_number * index
                         index += 1
 
                 for _ in range(segment.free):
@@ -97,6 +95,6 @@ def main() -> None:
 
             print(total)
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == "__main__":
+    main()
