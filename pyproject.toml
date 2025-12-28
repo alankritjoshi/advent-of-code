@@ -22,6 +22,8 @@ ignore = ["C901", "E203", "E251", "E266", "F403", "E262", "W291"]
 
 [tool.pyright]
 type-checking-mode = "strict"
+venvPath = "."
+venv = ".venv"
 exclude = ["**/.venv", "**/__pycache__"]
 
 [build-system]
