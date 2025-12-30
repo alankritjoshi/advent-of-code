@@ -2,49 +2,20 @@
 
 ## Requirements
 
-> NOTE: install instructions are for macOS using [Homebrew](https://brew.sh). Use your package manager of choice.
-
-### Talking with [AoC](https://adventofcode.com)
+### To setup [AoC](https://adventofcode.com)
 
 ```sh
-brew install bash httpie gum
+brew install bash httpie gum # zellij (optional)
 ```
+
+> NOTE: use package manager of your choice.
 
 ### Languages
 
-```sh
-brew install go python ruby
-```
-
-Or, alternatively, install all of them with [mise](https://mise.jdx.dev)
-
-#### [Go](https://golang.org) 1.21+
+Install [mise](https://mise.jdx.dev), then run:
 
 ```sh
-go mod download
-```
-
-#### [Python](https://www.python.org) 3.12+
-
-Install poetry:
-
-1. `pipx install poetry`
-2. Add pipx's install directory to path i.e., `~/local/bin/`
-
-```sh
-poetry install
-```
-
-#### [Ruby](https://www.ruby-lang.org) 3.3+
-
-```sh
-bundle install
-```
-
-### [OPTIONAL] [Zellij](https://github.com/zellij-org/zellij)
-
-```sh
-brew install zellij
+make
 ```
 
 ## Usage

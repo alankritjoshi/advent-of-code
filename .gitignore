@@ -1,2 +1,4 @@
+!.zellij/
+!.mise.toml
 .env
 **/tmp

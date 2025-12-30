@@ -7,15 +7,15 @@ layout {
           }
           pane split_direction="horizontal" {
               name "Tests"
-              pane command="~/.local/bin/poetry" {
+              pane command="mise" {
                   name "Test - Sample"
                   start_suspended false
-                  args "run" "python" "../../hotreload.py" "-s" "./main.py -i sample.txt" 
+                  args "exec" "--" "poetry" "run" "python" "../../hotreload.py" "-s" "./main.py -i sample.txt"
               }
-              pane command="~/.local/bin/poetry" {
+              pane command="mise" {
                   name "Test - Actual"
                   start_suspended false
-                  args "run" "python" "../../hotreload.py" "-s" "./main.py -i input.txt" 
+                  args "exec" "--" "poetry" "run" "python" "../../hotreload.py" "-s" "./main.py -i input.txt"
               }
           }
       }

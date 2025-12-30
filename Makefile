@@ -1,10 +1,17 @@
-.PHONY: cookie input template run air z setup setupz
+.PHONY: install cookie input template run air z setup setupz
 
 # set default to current year and day 1
 year ?= $(shell date +'%Y')
 day ?= 1
 lang ?= go
 txt ?= input.txt
+
+# install all languages and dependencies
+install:
+	@ mise install
+	@ mise exec -- go mod download
+	@ mise exec -- poetry install
+	@ mise exec -- bundle install
 
 # get the cookie from adventofcode.com
 cookie:
@@ -20,23 +27,23 @@ template:
 
 run:
 ifeq ($(lang),go)
-	@ go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
+	@ mise exec -- go run $(year)/$(day)/main.go -i $(year)/$(day)/$(txt)
 else ifeq ($(lang),py)
-	@ poetry run python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
+	@ mise exec -- poetry run python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
 else ifeq ($(lang),rb)
-	@ ./$(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)
+	@ mise exec -- ruby $(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)
 else
   @ echo "Unsupported language: $(lang)"
 endif
 
 hot:
 ifeq ($(lang),go)
-	@ cd $(year)/$(day) && go run github.com/cosmtrek/air --build.args_bin="-i,$(txt)" || true
+	@ cd $(year)/$(day) && mise exec -- air --build.args_bin="-i,$(txt)" || true
 	@ cd ..
 else ifeq ($(lang),py)
-	@ poetry run python hotreload.py -s "$(year)/$(day)/main.py -i $(year)/$(day)/$(txt)"
+	@ mise exec -- poetry run python hotreload.py -s "$(year)/$(day)/main.py -i $(year)/$(day)/$(txt)"
 else ifeq ($(lang),rb)
-	@ poetry run python hotreload.py -s "./$(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)"
+	@ mise exec -- poetry run python hotreload.py -s "./$(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)"
 else
   @ echo "Unsupported language: $(lang)"
 endif
