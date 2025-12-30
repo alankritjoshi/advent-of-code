@@ -62,7 +62,7 @@ make input
 
 ### Copy Template
 
-Copy the template for *lang* (`go` or `py`) to *year*/*day*/main.*lang*.
+Copy the template for *lang* (`go`, `py`, `rb`, or `js`) to *year*/*day*/main.*lang*.
 
 ```sh
 make template

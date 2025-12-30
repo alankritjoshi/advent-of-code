@@ -32,6 +32,8 @@ else ifeq ($(lang),py)
 	@ mise exec -- poetry run python $(year)/$(day)/main.py -i $(year)/$(day)/$(txt)
 else ifeq ($(lang),rb)
 	@ mise exec -- ruby $(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)
+else ifeq ($(lang),js)
+	@ mise exec -- node $(year)/$(day)/main.js -i $(year)/$(day)/$(txt)
 else
   @ echo "Unsupported language: $(lang)"
 endif
@@ -44,6 +46,8 @@ else ifeq ($(lang),py)
 	@ mise exec -- poetry run python hotreload.py -s "$(year)/$(day)/main.py -i $(year)/$(day)/$(txt)"
 else ifeq ($(lang),rb)
 	@ mise exec -- poetry run python hotreload.py -s "./$(year)/$(day)/main.rb -i $(year)/$(day)/$(txt)"
+else ifeq ($(lang),js)
+	@ mise exec -- poetry run python hotreload.py -r node -s "./$(year)/$(day)/main.js -i $(year)/$(day)/$(txt)"
 else
   @ echo "Unsupported language: $(lang)"
 endif
